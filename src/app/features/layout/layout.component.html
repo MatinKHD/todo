@@ -1,6 +1,6 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #sidenav mode="side" class="sidenav" fixedInViewport="true" [opened]="isDesktop" [mode]="isDesktop ? 'side' : 'over'">
-    <mat-toolbar>Todo Lists</mat-toolbar>
+    <mat-toolbar class="!bg-[#e1e1e161]">Todo Lists</mat-toolbar>
     <mat-nav-list>
       <mat-list-item routerLink="/daily">Daily</mat-list-item>
       <mat-list-item routerLink="/completed">Completed</mat-list-item>
@@ -11,11 +11,11 @@
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       @if(!isDesktop) {
-        <button mat-icon-button (click)="sidenav.toggle()">
+        <button mat-icon-button class="mx-2" (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
+        <span>Todo App</span>
       }
-      <span>Todo App</span>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
