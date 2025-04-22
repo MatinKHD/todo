@@ -1,1 +1,9 @@
-<p>todo-container works!</p>
+<app-todo
+    [title]="'My Todo Title My Todo Title My Todo Title My Todo Title'"
+    [date]="date"
+    [description]="description"
+    [isCompleted]="isCompleted"
+    (delete)="onDeleteTodo()"
+    (edit)="onEditTodo()"
+    (markComplete)="onMarkTodoComplete($event)"
+></app-todo>
