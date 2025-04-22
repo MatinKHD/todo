@@ -15,7 +15,7 @@ import { LocalRepository } from '../../core/local-store/local-repository';
     MatSidenavModule,
     MatToolbarModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'

@@ -10,9 +10,11 @@
 
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <button mat-icon-button (click)="sidenav.toggle()" *ngIf="!isDesktop">
-        <mat-icon>menu</mat-icon>
-      </button>
+      @if(!isDesktop) {
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
       <span>Todo App</span>
     </mat-toolbar>
     <router-outlet></router-outlet>
