@@ -9,5 +9,15 @@ html {
   ));
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-drawer-inner-container,  {
+  background-color: #e1e1e161;
+}
+
+
