@@ -1,11 +1,25 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #sidenav mode="side" class="sidenav" fixedInViewport="true" [opened]="isDesktop" [mode]="isDesktop ? 'side' : 'over'">
     <mat-toolbar class="!bg-[#e1e1e161]">Todo Lists</mat-toolbar>
-    <mat-nav-list>
-      <mat-list-item routerLink="/daily">Daily</mat-list-item>
-      <mat-list-item routerLink="/completed">Completed</mat-list-item>
-      <mat-list-item routerLink="/custom">Custom List</mat-list-item>
+    <mat-nav-list class="!px-4">
+      @for (item of navItems; track $index) {
+        <mat-list-item [routerLink]="item.route" >
+          <div class="flex items-center">
+            <span>{{ item.name }}</span>
+            <mat-icon class="mx-2">{{ item.icon }}</mat-icon>          </div>
+        </mat-list-item>
+      }
+      
     </mat-nav-list>
+
+    <button 
+      mat-icon-button 
+      class="group hover:bg-accent-300 w-full flex justify-center"
+      (click)="handleAddList()"
+      >
+      <mat-icon class="rounded-full group-hover:text-white group-hover:bg-accent-300 ">add</mat-icon>
+      <span class="group-hover:text-white group-hover:bg-accent-300">add new list</span>
+    </button>
   </mat-sidenav>
 
   <mat-sidenav-content>
