@@ -1,9 +1,9 @@
 <app-todo
-    [title]="'My Todo Title My Todo Title My Todo Title My Todo Title'"
-    [date]="date"
-    [description]="description"
-    [isCompleted]="isCompleted"
-    (delete)="onDeleteTodo()"
-    (edit)="onEditTodo()"
-    (markComplete)="onMarkTodoComplete($event)"
+    [title]="title()"
+    [date]="date()"
+    [description]="description()"
+    [isCompleted]="isCompleted()"
+    (delete)="handleOnDeleteTodo()"
+    (edit)="handleOnEditTodo()"
+    (markComplete)="handleOnMarkTodoComplete($event)"
 ></app-todo>

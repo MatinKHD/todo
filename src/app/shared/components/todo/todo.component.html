@@ -1,7 +1,7 @@
 <mat-expansion-panel class="flex flex-wrap border border-gray-300 rounded-lg shadow-sm" (afterExpand)="isExpanded = true" (afterCollapse)="isExpanded = false" [expanded]="isExpanded" >
     <mat-expansion-panel-header class="flex flex-wrap items-center">
       <mat-panel-title class="font-semibold text-sm lg:text-lg xl:text-xl 2xl:text-2xl" [ngClass]="[isExpanded ? 'w-full' : 'w-1/2']">
-        {{ isExpanded ? title : (title.length > 20 ? title.slice(0, 20) + '...' : title) }}
+        {{ isExpanded ? title() : (title.length > 20 ? title().slice(0, 20) + '...' : title()) }}
       </mat-panel-title>
       @if(!isExpanded) {
         <mat-panel-description class="flex justify-between items-center">
@@ -11,7 +11,7 @@
     </mat-expansion-panel-header>
   
     <p class="text-gray-400 text-sm break-words overflow-hidden mt-2">
-      {{ description }}
+      {{ description() }}
     </p>
 
   
@@ -23,7 +23,7 @@
         <button
             mat-icon-button
             color="primary"
-            (click)="onEdit()"
+            (click)="handleOnEdit()"
             class="hover:text-accent-50"
         >
             <mat-icon>edit</mat-icon>
@@ -31,7 +31,7 @@
         <button
             mat-icon-button
             color="warn"
-            (click)="onDelete()"
+            (click)="handleOnDelete()"
             class="hover:text-error-50"
         >
             <mat-icon>delete</mat-icon>
@@ -41,11 +41,11 @@
 
 
   <ng-template #dateAndComplete>
-    <p class="text-sm text-gray-500" [ngClass]="[isExpanded ? 'w-full text-end': '']">{{ date | date: 'mediumDate' }}</p>
+    <p class="text-sm text-gray-500" [ngClass]="[isExpanded ? 'w-full text-end': '']">{{ date() | date: 'mediumDate' }}</p>
 
         <mat-checkbox
-            [(ngModel)]="isCompleted"
-            (change)="onMarkComplete(); $event.source._elementRef.nativeElement.click()"
+            [formControl]="isCompletedControl"
+            (change)="handleOnMarkComplete(); $event.source._elementRef.nativeElement.click()"
             class="text-sm text-gray-600"
             matTooltip="Mark as completed"
         >

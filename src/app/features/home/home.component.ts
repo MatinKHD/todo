@@ -11,4 +11,23 @@ import { TodoContainerComponent } from '../../shared/components/todo-container/t
 })
 export class HomeComponent {
 
+  title: string = 'My Todo Title My Todo Title My Todo Title My Todo Title';
+  date: Date = new Date;
+  description: string = 'description for the test of the testing todo';
+  isCompleted: boolean = false;
+
+
+  onDeleteTodo() {
+    // do someting
+  }
+
+  onEditTodo() {
+    // do someting
+  }
+
+  onMarkTodoComplete(event: boolean) {
+    // do someting
+    this.isCompleted = event;
+  }
+
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, InputSignal, Output } from '@angular/core';
 import { TodoComponent } from '../todo/todo.component';
 
 @Component({
@@ -10,26 +10,25 @@ import { TodoComponent } from '../todo/todo.component';
   styleUrl: './todo-container.component.scss'
 })
 export class TodoContainerComponent {
-  @Input() title: string = 'title';
-  @Input() date: Date = new Date();
-  @Input() description: string = 'description descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription';
-  @Input() isCompleted: boolean = false;
+  title = input<string>('');
+  date = input<Date>(new Date);
+  description = input<string>('');
+  isCompleted = input<boolean>(false);
 
-  @Output() delete = new EventEmitter<void>();
-  @Output() edit = new EventEmitter<void>();
-  @Output() markComplete = new EventEmitter<boolean>();
+  @Output() onDelete = new EventEmitter<void>();
+  @Output() onEdit = new EventEmitter<void>();
+  @Output() onMarkComplete = new EventEmitter<boolean>();
 
-  onDeleteTodo() {
-    this.delete.emit();
+  handleOnDeleteTodo() {
+    this.onDelete.emit();
   }
 
-  onEditTodo() {
-    this.edit.emit();
+  handleOnEditTodo() {
+    this.onEdit.emit();
   }
 
-  onMarkTodoComplete(event: any) {
-    this.isCompleted = event.checked;
-    this.markComplete.emit(this.isCompleted);
+  handleOnMarkTodoComplete(event: any) {
+    this.onMarkComplete.emit(event.checked);
   }
 
 }
