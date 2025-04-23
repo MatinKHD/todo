@@ -1,1 +1,13 @@
-<p>create-list-dialog works!</p>
+<section class="w-full h-full bg-white rounded-lg flex flex-wrap justify-center px-4">
+    <header class="w-full flex justify-between my-4">
+        <p class="font-semibold text-lg">{{data.isEditMode ? 'Edit' : 'Create'}} List Title</p>
+        <mat-icon class="text-lg cursor-pointer" (click)="handleClose()">close</mat-icon>
+    </header>
+    <form class="w-full flex flex-wrap justify-center items-center mb-4">
+            <mat-form-field appearance="outline" class="w-full mb-4" >
+                <input matInput [(ngModel)]="title" placeholder="List Title">
+            </mat-form-field>
+
+            <button mat-flat-button color="primary" (click)="handleSubmit()">Confirm</button>
+    </form>
+</section>
