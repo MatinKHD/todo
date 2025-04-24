@@ -17,8 +17,8 @@ export class ListService extends BaseService {
     return this.getAll<ListInterface[]>(`lists/${id}`);
   }
 
-  insertItemToList(id: string, body: Omit<ListInterface, 'id'> ): Observable<ListInterface> {
-    return this.post<ListInterface, Omit<ListInterface, 'id'>>(`lists/${id}`, body)
+  insertItemToList(body: Omit<ListInterface, 'id'>): Observable<ListInterface> {
+    return this.post<ListInterface, Omit<ListInterface, 'id'>>(`lists`, body)
   }
 
   updateItem(id: string, body: ListInterface): Observable<ListInterface> {
