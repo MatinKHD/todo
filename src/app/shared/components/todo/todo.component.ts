@@ -34,23 +34,23 @@ export class TodoComponent implements OnInit {
 
   isExpanded = false;
 
-  @Output() onDelete = new EventEmitter<void>();
-  @Output() onEdit = new EventEmitter<void>();
-  @Output() onMarkComplete = new EventEmitter<boolean>();
+  @Output() onDelete = new EventEmitter<string>();
+  @Output() onEdit = new EventEmitter<TaskInterface>();
+  @Output() onMarkComplete = new EventEmitter<TaskInterface>();
 
   ngOnInit(): void {
     this.isCompletedControl.setValue(this.todo()?.done)
   }
 
   handleOnDelete(): void {
-    this.onDelete.emit();
+    this.onDelete.emit(this.todo()?.id);
   }
 
   handleOnEdit(): void {
-    this.onEdit.emit();
+    this.onEdit.emit(this.todo());
   }
 
   handleOnMarkComplete(): void {
-    this.onMarkComplete.emit(this.todo()?.done);
+    this.onMarkComplete.emit(this.todo());
   }
 }

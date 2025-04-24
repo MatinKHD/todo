@@ -16,20 +16,20 @@ export class TodoContainerComponent {
 
   tasks = input<TaskInterface[]>([]);
 
-  @Output() onDelete = new EventEmitter<void>();
-  @Output() onEdit = new EventEmitter<void>();
-  @Output() onMarkComplete = new EventEmitter<boolean>();
+  @Output() onDelete = new EventEmitter<string>();
+  @Output() onEdit = new EventEmitter<TaskInterface>();
+  @Output() onMarkComplete = new EventEmitter<TaskInterface>();
 
-  handleOnDeleteTodo() {
-    this.onDelete.emit();
+  handleOnDeleteTodo(id: string) {
+    this.onDelete.emit(id);
   }
 
-  handleOnEditTodo() {
-    this.onEdit.emit();
+  handleOnEditTodo(task: TaskInterface) {
+    this.onEdit.emit(task);
   }
 
-  handleOnMarkTodoComplete(event: any) {
-    this.onMarkComplete.emit(event.checked);
+  handleOnMarkTodoComplete(event: TaskInterface) {
+    this.onMarkComplete.emit(event);
   }
 
 }
