@@ -1,7 +1,7 @@
 @for (task of tasks(); track $index) {
     <app-todo
         [todo]="task"
-        (onDelete)="handleOnDeleteTodo($event)"
+        (onDelete)="handleOnDeleteTodo($event, $index)"
         (onEdit)="handleOnEditTodo($event)"
         (onMarkComplete)="handleOnMarkTodoComplete($event)"
     ></app-todo>
