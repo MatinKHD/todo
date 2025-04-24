@@ -1,13 +1,23 @@
-import { Dialog, DialogModule } from '@angular/cdk/dialog';
+import { DialogModule } from '@angular/cdk/dialog';
 import { NgFor, NgIf } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { map, Observable, of, switchMap, tap } from 'rxjs';
 import { LocalRepository } from '../../core/local-store/local-repository';
+import { ListService } from '../../core/services/list/list.service';
 import { CreateListDialogComponent } from '../../shared/components/create-list-dialog/create-list-dialog.component';
+import { ListInterface } from '../../shared/interfaces/list.interface';
+
+interface NavItems {
+  name: string,
+  route: string,
+  icon: string | null,
+}
 
 @Component({
   selector: 'app-layout',
@@ -27,7 +37,7 @@ import { CreateListDialogComponent } from '../../shared/components/create-list-d
 })
 export class LayoutComponent implements OnInit {
   isDesktop = true;
-  navItems = [
+  navItems: NavItems[] = [
     {
       name: 'Daily',
       icon: 'calendar_today',
@@ -42,7 +52,8 @@ export class LayoutComponent implements OnInit {
 
   constructor(
     private _localRepository: LocalRepository,
-    private dialog: Dialog,
+    private dialog: MatDialog,
+    private listService: ListService
   ) {
 
   }
@@ -50,6 +61,8 @@ export class LayoutComponent implements OnInit {
   ngOnInit(): void {
     if (!this._localRepository.IsInBrowser) return;
     this.isDesktop = window.innerWidth > 768;
+
+    this.getListItems().subscribe();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -60,7 +73,21 @@ export class LayoutComponent implements OnInit {
 
 
   handleAddList(): void {
-    this.dialog.open(CreateListDialogComponent);
+    this.dialog.open(CreateListDialogComponent).afterClosed().pipe(
+      switchMap((res) => {
+        if (!res) return of(null);
+        return this.listService.insertItemToList(res)
+      })
+    ).subscribe();
+  }
+
+  private getListItems(): Observable<ListInterface[]> {
+    return this.getListItems().pipe(
+      tap(res => {
+        const navItems = res.map(x => ({name: x.title, route: `list/${x.id}`, icon: null}))
+        this.navItems = [...this.navItems, ...navItems]
+      })
+    )
   }
 
 }
