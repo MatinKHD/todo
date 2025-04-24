@@ -1,6 +1,16 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav mode="side" class="sidenav" fixedInViewport="true" [opened]="isDesktop" [mode]="isDesktop ? 'side' : 'over'" [disableClose]="isDesktop">
-    <mat-toolbar class="!bg-[#e1e1e161]">Todo Lists</mat-toolbar>
+  <mat-sidenav 
+    #sidenav 
+    mode="side" 
+    class="sidenav" 
+    fixedInViewport="true" 
+    [opened]="isDesktop" 
+    [mode]="isDesktop ? 'side' : 'over'" 
+    [disableClose]="isDesktop"
+  >
+    <mat-toolbar class="!bg-[#e1e1e161]">
+      Todo Lists
+    </mat-toolbar>
     <mat-nav-list class="!px-4">
       @for (item of navItems; track $index) {
         <mat-list-item [routerLink]="item.route" class="mb-2" >
