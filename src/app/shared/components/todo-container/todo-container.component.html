@@ -1,9 +1,8 @@
-<app-todo
-    [title]="title()"
-    [date]="date()"
-    [description]="description()"
-    [isCompleted]="isCompleted()"
-    (delete)="handleOnDeleteTodo()"
-    (edit)="handleOnEditTodo()"
-    (markComplete)="handleOnMarkTodoComplete($event)"
-></app-todo>
+@for (task of tasks(); track $index) {
+    <app-todo
+        [todo]="task"
+        (delete)="handleOnDeleteTodo()"
+        (edit)="handleOnEditTodo()"
+        (markComplete)="handleOnMarkTodoComplete($event)"
+    ></app-todo>
+}

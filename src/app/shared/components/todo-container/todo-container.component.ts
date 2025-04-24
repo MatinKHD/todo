@@ -1,19 +1,20 @@
 import { Component, EventEmitter, input, Input, InputSignal, Output } from '@angular/core';
 import { TodoComponent } from '../todo/todo.component';
+import { TaskInterface } from '../../interfaces/task.interface';
+import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-todo-container',
   imports: [
-    TodoComponent
+    TodoComponent,
+    NgFor
   ],
   templateUrl: './todo-container.component.html',
   styleUrl: './todo-container.component.scss'
 })
 export class TodoContainerComponent {
-  title = input<string>('');
-  date = input<Date>(new Date);
-  description = input<string>('');
-  isCompleted = input<boolean>(false);
+
+  tasks = input<TaskInterface[]>([]);
 
   @Output() onDelete = new EventEmitter<void>();
   @Output() onEdit = new EventEmitter<void>();
