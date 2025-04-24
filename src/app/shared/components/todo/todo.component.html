@@ -1,7 +1,7 @@
 <mat-expansion-panel class="flex flex-wrap border border-gray-300 rounded-lg shadow-sm" (afterExpand)="isExpanded = true" (afterCollapse)="isExpanded = false" [expanded]="isExpanded" >
     <mat-expansion-panel-header class="flex flex-wrap items-center">
       <mat-panel-title class="font-semibold text-sm lg:text-lg xl:text-xl 2xl:text-2xl" [ngClass]="[isExpanded ? 'w-full' : 'w-1/2']">
-        {{ isExpanded ? title() : (title.length > 20 ? title().slice(0, 20) + '...' : title()) }}
+        {{ isExpanded ? title() : (title() | truncate) }}
       </mat-panel-title>
       @if(!isExpanded) {
         <mat-panel-description class="flex justify-between items-center">

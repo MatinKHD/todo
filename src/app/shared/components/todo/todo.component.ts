@@ -1,11 +1,12 @@
 import { DatePipe, NgClass, NgTemplateOutlet } from '@angular/common';
-import { Component, EventEmitter, input, InputSignal, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, input, OnInit, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 @Component({
   selector: 'app-todo',
@@ -18,7 +19,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     DatePipe,
     MatTooltipModule,
     NgClass,
-    NgTemplateOutlet
+    NgTemplateOutlet,
+    TruncatePipe
   ],
   templateUrl: './todo.component.html',
   styleUrl: './todo.component.scss'
