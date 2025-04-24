@@ -82,7 +82,7 @@ export class LayoutComponent implements OnInit {
   }
 
   private getListItems(): Observable<ListInterface[]> {
-    return this.getListItems().pipe(
+    return this.listService.getAllLists().pipe(
       tap(res => {
         const navItems = res.map(x => ({name: x.title, route: `list/${x.id}`, icon: null}))
         this.navItems = [...this.navItems, ...navItems]

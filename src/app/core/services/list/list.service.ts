@@ -13,8 +13,12 @@ export class ListService extends BaseService {
     super(http)
   }
 
-  getListItems(id: string): Observable<ListInterface[]> {
-    return this.getAll<ListInterface[]>(`lists/${id}`);
+  getAllLists(): Observable<ListInterface[]> {
+    return this.getAll<ListInterface[]>('lists')
+  }
+
+  getListItems(id: string): Observable<ListInterface> {
+    return this.getAll<ListInterface>(`lists/${id}`);
   }
 
   insertItemToList(body: Omit<ListInterface, 'id'>): Observable<ListInterface> {
