@@ -23,17 +23,20 @@ export class HomeComponent extends BaseComponent implements OnInit {
     this.subscriptions.push(sub);
   }
 
-  onDeleteTodo(event: { id: string, index: number }) {
-    this.tasksService.deleteTask(event.id).pipe(
-      tap(() => this.dailyTasks.update(tasks => tasks.filter((_, i) => i !== event.index)))
+  onDeleteTodo(id: string) {
+    this.tasksService.deleteTask(id).pipe(
+      tap(() => this.dailyTasks.update(tasks => tasks.filter((task) => task.id !== id)))
     ).subscribe();
   }
 
-  onMarkTodoComplete(event: TaskInterface, index: number) {
-    this.tasksService.updateTask(event.id, event).pipe(
+  onMarkTodoComplete(task: TaskInterface) {
+    this.tasksService.updateTask(task.id, task).pipe(
       tap(() => {
         this.dailyTasks.update((tasks) => {
-          tasks[index] = { ...tasks[index], done: event.done }
+          const taskIndex = tasks.findIndex(t => t.id === task.id);
+          if (taskIndex !== -1) {
+            tasks[taskIndex] = { ...tasks[taskIndex], done: task.done }
+          }
           return tasks;
         })
       }),

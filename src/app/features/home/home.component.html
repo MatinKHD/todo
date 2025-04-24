@@ -4,6 +4,9 @@
     <app-todo-container
         class="w-full"
         [tasks]="dailyTasks()"
+        (onDelete)="onDeleteTodo($event)"
+        (onMarkComplete)="onMarkTodoComplete($event)"
+        (onEdit)="onEditTodo($event)"
     >
     </app-todo-container>
 </div>

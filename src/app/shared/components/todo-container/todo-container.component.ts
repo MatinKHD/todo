@@ -16,12 +16,12 @@ export class TodoContainerComponent {
 
   tasks = input<TaskInterface[]>([]);
 
-  @Output() onDelete = new EventEmitter<{id: string, index: number}>();
+  @Output() onDelete = new EventEmitter<string>();
   @Output() onEdit = new EventEmitter<TaskInterface>();
   @Output() onMarkComplete = new EventEmitter<TaskInterface>();
 
-  handleOnDeleteTodo(id: string, index: number) {
-    this.onDelete.emit({id, index});
+  handleOnDeleteTodo(id: string) {
+    this.onDelete.emit(id);
   }
 
   handleOnEditTodo(task: TaskInterface) {
