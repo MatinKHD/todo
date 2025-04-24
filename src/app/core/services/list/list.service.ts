@@ -1,9 +1,31 @@
 import { Injectable } from '@angular/core';
+import { BaseService } from '../base.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { ListInterface } from '../../../shared/interfaces/list.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ListService {
+export class ListService extends BaseService {
 
-  constructor() { }
+  constructor(http: HttpClient) { 
+    super(http)
+  }
+
+  getListItems(id: string): Observable<ListInterface[]> {
+    return this.getAll<ListInterface[]>(`lists/${id}`);
+  }
+
+  insertItemToList(id: string, body: Omit<ListInterface, 'id'> ): Observable<ListInterface> {
+    return this.post<ListInterface, Omit<ListInterface, 'id'>>(`lists/${id}`, body)
+  }
+
+  updateItem(id: string, body: ListInterface): Observable<ListInterface> {
+    return this.put<ListInterface, ListInterface>(`lists`, body, id)
+  }
+
+  removeItem(id: string): Observable<ListInterface> {
+    return this.delete<ListInterface>(`lists`, id);
+  }
 }
