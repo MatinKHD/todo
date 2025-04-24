@@ -27,6 +27,18 @@ export class HomeComponent implements OnInit {
     ).subscribe();
   }
 
+  onMarkTodoComplete(event: TaskInterface, index: number) {
+    this.tasksService.updateTask(event.id, event).pipe(
+      tap(() => {
+        this.dailyTasks.update((tasks) => {
+          const updatedTasks = [...tasks];
+          updatedTasks[index] = { ...updatedTasks[index], done: event.done }
+          return updatedTasks;
+        })
+      })
+    )
+  }
+
   private getAllDailyTasks(): Observable<TaskInterface[]> {
     return this.tasksService.getDailyTasks().pipe(
       tap(res => this.dailyTasks.set(res))
