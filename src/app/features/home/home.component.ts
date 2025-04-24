@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { Observable, tap } from 'rxjs';
 import { TodoContainerComponent } from '../../shared/components/todo-container/todo-container.component';
+import { TaskInterface } from '../../shared/interfaces/task.interface';
+import { TasksService } from './../../core/services/tasks/tasks.service';
 
 @Component({
   selector: 'app-home',
@@ -9,25 +12,19 @@ import { TodoContainerComponent } from '../../shared/components/todo-container/t
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
-  title: string = 'My Todo Title My Todo Title My Todo Title My Todo Title';
-  date: Date = new Date;
-  description: string = 'description for the test of the testing todo';
-  isCompleted: boolean = false;
+  tasksService = inject(TasksService);
+  dailyTasks = signal<TaskInterface[]>([]);
 
-
-  onDeleteTodo() {
-    // do someting
+  ngOnInit(): void {
+    this.getAllDailyTasks().subscribe();
   }
 
-  onEditTodo() {
-    // do someting
-  }
-
-  onMarkTodoComplete(event: boolean) {
-    // do someting
-    this.isCompleted = event;
+  private getAllDailyTasks(): Observable<TaskInterface[]> {
+    return this.tasksService.getDailyTasks().pipe(
+      tap(res => this.dailyTasks.set(res))
+    )
   }
 
 }
