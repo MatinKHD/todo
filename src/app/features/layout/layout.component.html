@@ -1,25 +1,26 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav mode="side" class="sidenav" fixedInViewport="true" [opened]="isDesktop" [mode]="isDesktop ? 'side' : 'over'">
+  <mat-sidenav #sidenav mode="side" class="sidenav" fixedInViewport="true" [opened]="isDesktop" [mode]="isDesktop ? 'side' : 'over'" [disableClose]="isDesktop">
     <mat-toolbar class="!bg-[#e1e1e161]">Todo Lists</mat-toolbar>
     <mat-nav-list class="!px-4">
       @for (item of navItems; track $index) {
-        <mat-list-item [routerLink]="item.route" >
+        <mat-list-item [routerLink]="item.route" class="mb-2" >
           <div class="flex items-center">
             <span>{{ item.name }}</span>
-            <mat-icon class="mx-2">{{ item.icon }}</mat-icon>          </div>
+            <mat-icon class="mx-2">{{ item.icon }}</mat-icon>          
+          </div>
         </mat-list-item>
       }
-      
+      <mat-list-item class="">
+        <button 
+          mat-icon-button 
+          class="w-full flex"
+          (click)="handleAddList()"
+        >
+        <span class="text-accent-500">Add New List</span>
+        <mat-icon class="font-semibold text-accent-500">add</mat-icon>
+        </button>
+      </mat-list-item>
     </mat-nav-list>
-
-    <button 
-      mat-icon-button 
-      class="group hover:bg-accent-300 w-full flex justify-center"
-      (click)="handleAddList()"
-      >
-      <mat-icon class="rounded-full group-hover:text-white group-hover:bg-accent-300 ">add</mat-icon>
-      <span class="group-hover:text-white group-hover:bg-accent-300">add new list</span>
-    </button>
   </mat-sidenav>
 
   <mat-sidenav-content>
@@ -31,6 +32,8 @@
         <span>Todo App</span>
       }
     </mat-toolbar>
-    <router-outlet></router-outlet>
+    <main class="w-full h-full px-8">
+      <router-outlet></router-outlet>
+    </main>
   </mat-sidenav-content>
 </mat-sidenav-container>
