@@ -21,12 +21,12 @@ export class HomeComponent implements OnInit {
     this.getAllDailyTasks().subscribe();
   }
 
-  onDeleteTodo(event: TaskInterface, index: number) {
+  onDeleteTodo(event: { id: string, index: number }) {
     this.tasksService.deleteTask(event.id).pipe(
-      tap(() => this.dailyTasks.update(tasks => tasks.filter((_, i) => i !== index)))
+      tap(() => this.dailyTasks.update(tasks => tasks.filter((_, i) => i !== event.index)))
     ).subscribe();
   }
-  
+
   private getAllDailyTasks(): Observable<TaskInterface[]> {
     return this.tasksService.getDailyTasks().pipe(
       tap(res => this.dailyTasks.set(res))
