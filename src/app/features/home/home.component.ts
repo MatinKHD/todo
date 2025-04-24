@@ -44,6 +44,21 @@ export class HomeComponent extends BaseComponent implements OnInit {
     ).subscribe();
   }
 
+  
+  onEditTodo(task: TaskInterface) {
+    this.tasksService.updateTask(task.id, task).pipe(
+      tap(() => {
+        this.dailyTasks.update((tasks) => {
+          const taskIndex = tasks.findIndex(t => t.id === task.id);
+          tasks[taskIndex] = { ...task };
+          this.snackBar.notification$.next('Edited Successfully')
+          return tasks;
+        })
+      }),
+      this.handleError(`Can't edit`)
+    ).subscribe();
+  }
+
   private getAllDailyTasks(): Observable<TaskInterface[]> {
     return this.tasksService.getDailyTasks().pipe(
       tap(res => this.dailyTasks.set(res))
