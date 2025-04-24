@@ -1,7 +1,7 @@
 <mat-expansion-panel class="flex flex-wrap border border-gray-300 rounded-lg shadow-sm" (afterExpand)="isExpanded = true" (afterCollapse)="isExpanded = false" [expanded]="isExpanded" >
     <mat-expansion-panel-header class="flex flex-wrap items-center">
       <mat-panel-title class="font-semibold text-sm lg:text-lg xl:text-xl 2xl:text-2xl" [ngClass]="[isExpanded ? 'w-full' : 'w-1/2']">
-        {{ isExpanded ? title() : (title() | truncate) }}
+        {{ isExpanded ? todo()?.title : (todo()?.title! | truncate) }}
       </mat-panel-title>
       @if(!isExpanded) {
         <mat-panel-description class="flex justify-between items-center">
@@ -11,7 +11,7 @@
     </mat-expansion-panel-header>
   
     <p class="text-gray-400 text-sm break-words overflow-hidden mt-2">
-      {{ description() }}
+      {{ todo()?.description }}
     </p>
 
   
@@ -41,7 +41,7 @@
 
 
   <ng-template #dateAndComplete>
-    <p class="text-sm text-gray-500" [ngClass]="[isExpanded ? 'w-full text-end': '']">{{ date() | date: 'mediumDate' }}</p>
+    <p class="text-sm text-gray-500" [ngClass]="[isExpanded ? 'w-full text-end': '']">{{ todo()?.date| date: 'mediumDate' }}</p>
 
         <mat-checkbox
             [formControl]="isCompletedControl"

@@ -7,6 +7,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
+import { TaskInterface } from '../../interfaces/task.interface';
 
 @Component({
   selector: 'app-todo',
@@ -27,10 +28,7 @@ import { TruncatePipe } from '../../pipes/truncate.pipe';
 })
 export class TodoComponent implements OnInit {
 
-  title = input<string>('');
-  date = input<Date>(new Date);
-  description = input<string>('');
-  isCompleted = input<boolean>(false);
+  todo = input<TaskInterface>();
 
   isCompletedControl: FormControl = new FormControl(false);
 
@@ -41,7 +39,7 @@ export class TodoComponent implements OnInit {
   @Output() onMarkComplete = new EventEmitter<boolean>();
 
   ngOnInit(): void {
-    this.isCompletedControl.setValue(this.isCompleted)
+    this.isCompletedControl.setValue(this.todo()?.done)
   }
 
   handleOnDelete(): void {
@@ -53,6 +51,6 @@ export class TodoComponent implements OnInit {
   }
 
   handleOnMarkComplete(): void {
-    this.onMarkComplete.emit(this.isCompleted());
+    this.onMarkComplete.emit(this.todo()?.done);
   }
 }
