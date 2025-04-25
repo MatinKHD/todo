@@ -1,6 +1,6 @@
 export interface ListInterface {
-    id: string
+    _id: string
     title: string,
-    date: Date,
+    date: Date | string,
     isMain: Boolean
 }
