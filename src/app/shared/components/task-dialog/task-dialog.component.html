@@ -1,1 +1,48 @@
-<p>task-dialog works!</p>
+<section class="w-full bg-white rounded-lg flex flex-wrap justify-center px-4">
+    <header class="w-full flex items-center justify-between my-4">
+        <h1 class="text-lg font-semibold">Inserting tasks in {{data.listName}}</h1>
+        <button
+            mat-icon-button
+            color="warn"
+            (click)="handleClose()"
+            class="hover:text-error-50"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </header>
+    <main class="w-full flex flex-wrap items-center mb-4">
+         
+            <mat-form-field class="w-full mb-4">
+                <mat-label>Enter your title</mat-label>
+                <input
+                  matInput
+                  placeholder="title"
+                  [formControl]="titleControl"
+                  (blur)="updateErrorMessageForTitle()"
+                  required
+                  maxlength="100"
+                />
+                @if (titleControl?.invalid) {
+                  <mat-error>{{errorMessageForTitle()}}</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field class="w-full mb-4">
+                <mat-label>Textarea</mat-label>
+                <textarea matInput [formControl]="descriptionControl" maxlength="500"></textarea>
+                @if (descriptionControl?.invalid) {
+                  <mat-error>{{errorMessageForTitle()}}</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field class="w-full mb-4">
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker" [formControl]="dateControl">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+         
+        <button mat-flat-button color="primary" class="text-lg" [disabled]="titleControl?.invalid || descriptionControl.invalid">Create</button>
+    </main>
+</section>
