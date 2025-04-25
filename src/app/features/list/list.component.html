@@ -1,1 +1,37 @@
-<p>list works!</p>
+<div class="flex flex-wrap justify-center items-center mx-2">
+    <header class="w-full flex justify-between">
+        <div class="w-1/2 flex">
+            <h1 class="text-3xl font-semibold mb-4">
+                ListName Tasks
+            </h1>
+            <button 
+                mat-icon-button
+                color="primary"
+                (click)="handleChangeName()"
+                class="hover:text-accent-50 mx-2">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </div>
+
+        <button 
+            mat-flat-button
+            color="primary"
+            (click)="handleAddTasks()"
+            class="hover:text-accent-50 px-3"
+        >
+            <span class="text-lg font-semibold">Add Tasks</span>    
+            <mat-icon>add</mat-icon>
+        </button>
+    </header>
+    
+    
+    
+    <app-todo-container
+        class="w-full"
+        [tasks]="tasks()"
+        (onDelete)="onDeleteTask($event)"
+        (onMarkComplete)="onMarkCompletedTask($event)"
+        (onEdit)="onEditTask($event)"
+    >
+    </app-todo-container>
+</div>
