@@ -3,21 +3,46 @@ import { Observable, tap } from 'rxjs';
 import { BaseComponent } from '../../core/components/base.component';
 import { TasksService } from '../../core/services/tasks/tasks.service';
 import { TaskInterface } from '../../shared/interfaces/task.interface';
+import { ActivatedRoute } from '@angular/router';
+import { ListService } from '../services/list/list.service';
+import { ListInterface } from '../../shared/interfaces/list.interface';
 
 @Component({
     template: ``
 })
 export abstract class BaseTaskComponent extends BaseComponent implements OnInit {
     tasksService = inject(TasksService);
+    listService = inject(ListService);
+    activatedRoute = inject(ActivatedRoute);
     tasks = signal<TaskInterface[]>([]);
+    listId!: string;
+    listDetail!: ListInterface;
 
     abstract getTasks(): Observable<TaskInterface[]>;
 
     ngOnInit(): void {
+        this.activatedRoute.params.pipe(
+            tap(params => {
+                if(!params['id']) return;
+                this.listId = params['id']
+            })
+        ).subscribe();
+
+        const listSub = this.getListDetail().subscribe()
+
         const sub = this.getTasks().pipe(
             tap((res) => this.tasks.set(res))
         ).subscribe();
-        this.subscriptions.push(sub);
+        this.subscriptions.push(sub, listSub);
+    }
+
+    private getListDetail(): Observable<ListInterface> {
+        return this.listService.getListDetail(this.listId).pipe(
+            tap((res) => {
+                if(!res) return;
+                this.listDetail = res
+            })
+        )
     }
 
     onDeleteTask(id: string): void {
