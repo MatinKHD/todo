@@ -1,10 +1,8 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { BaseComponent } from '../../core/components/base.component';
-import { TasksService } from '../../core/services/tasks/tasks.service';
-import { TaskInterface } from '../../shared/interfaces/task.interface';
-import { tap, Observable } from 'rxjs';
-import { TodoContainerComponent } from '../../shared/components/todo-container/todo-container.component';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { BaseTaskComponent } from '../../core/components/base-task.component';
+import { TodoContainerComponent } from '../../shared/components/todo-container/todo-container.component';
+import { TaskInterface } from '../../shared/interfaces/task.interface';
 
 @Component({
   selector: 'app-completed',
