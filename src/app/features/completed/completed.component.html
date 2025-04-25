@@ -1,1 +1,12 @@
-<p>completed works!</p>
+<div class="flex flex-wrap justify-center items-center mx-2">
+    <h1 class="w-full text-3xl font-semibold mb-4">Welcome to the Home Page</h1>
+    
+    <app-todo-container
+        class="w-full"
+        [tasks]="tasks()"
+        (onDelete)="onDeleteTask($event)"
+        (onMarkComplete)="($event)"
+        (onEdit)="onEditTask($event)"
+    >
+    </app-todo-container>
+</div>
