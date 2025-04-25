@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -25,6 +25,7 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class TaskDialogComponent implements OnInit {
   data = inject(MAT_DIALOG_DATA);
+  dialogRef = inject(MatDialogRef<TaskDialogComponent>);
   fb = inject(FormBuilder);
   errorMessageForTitle = signal('');
 
@@ -43,7 +44,16 @@ export class TaskDialogComponent implements OnInit {
     if (this.titleControl.hasError('maxlength')) this.errorMessageForTitle.set(`title must be 100 char maximum`)
   }
 
-  handleClose() {
+  handleClose(body: any = null) {
+    this.dialogRef.close(body)
+  }
 
+  handleSubmit() {
+    const body = {
+      title: this.titleControl.value,
+      description: this.descriptionControl.value,
+      date: this.dateControl.value,
+    }
+    this.handleClose(body)
   }
 }

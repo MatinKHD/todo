@@ -43,6 +43,6 @@
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
          
-        <button mat-flat-button color="primary" class="text-lg" [disabled]="titleControl?.invalid || descriptionControl.invalid">Create</button>
+        <button mat-flat-button color="primary" class="text-lg" [disabled]="titleControl?.invalid || descriptionControl.invalid" (click)="handleSubmit()">Create</button>
     </main>
 </section>
