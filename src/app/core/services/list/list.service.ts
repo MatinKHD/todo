@@ -17,7 +17,7 @@ export class ListService extends BaseService {
     return this.getAll<ListInterface[]>('lists')
   }
 
-  getListItems(id: string): Observable<ListInterface> {
+  getListDetail(id: string): Observable<ListInterface> {
     return this.getAll<ListInterface>(`lists/${id}`);
   }
 
