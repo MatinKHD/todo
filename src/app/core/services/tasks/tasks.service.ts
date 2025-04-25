@@ -25,6 +25,10 @@ export class TasksService extends BaseService {
     return this.getAll<TaskInterface[]>('mainList');
   }
 
+  getTasksOfList(listId: string): Observable<TaskInterface[]> {
+    return this.getAll<TaskInterface[]>(`/tasks/query/${listId}`)
+  }
+
   findTaskByListId(listId: string): Observable<TaskInterface> {
     return this.getByDetail<TaskInterface>('tasks/query/', listId);
   }
