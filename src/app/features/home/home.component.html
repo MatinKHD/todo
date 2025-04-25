@@ -3,10 +3,10 @@
     
     <app-todo-container
         class="w-full"
-        [tasks]="dailyTasks()"
-        (onDelete)="onDeleteTodo($event)"
-        (onMarkComplete)="onMarkTodoComplete($event)"
-        (onEdit)="onEditTodo($event)"
+        [tasks]="tasks()"
+        (onDelete)="onDeleteTask($event)"
+        (onMarkComplete)="onMarkCompletedTask($event)"
+        (onEdit)="onEditTask($event)"
     >
     </app-todo-container>
 </div>
