@@ -43,16 +43,16 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
 
     onDeleteTask(id: string): void {
         this.tasksService.deleteTask(id).pipe(
-            tap(() => this.tasks.update((tasks) => tasks.filter((task) => task.id !== id))),
+            tap(() => this.tasks.update((tasks) => tasks.filter((task) => task._id !== id))),
             this.handleError(`Something went wrong, Please try again`)
         ).subscribe();
     }
 
     onEditTask(task: TaskInterface): void {
-        this.tasksService.updateTask(task.id, task).pipe(
+        this.tasksService.updateTask(task._id, task).pipe(
             tap(() => {
                 this.tasks.update((tasks) => {
-                    const taskIndex = tasks.findIndex((t) => t.id === task.id);
+                    const taskIndex = tasks.findIndex((t) => t._id === task._id);
                     if (taskIndex !== -1) {
                         tasks[taskIndex] = { ...tasks[taskIndex], ...task };
                     }
@@ -63,12 +63,13 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
         ).subscribe();
     }
 
-    onMarkCompletedTask(task: TaskInterface): void {
-        this.tasksService.updateTask(task.id, task).pipe(
+    onMarkCompletedTask(event: { task: TaskInterface, isComplete: boolean }): void {
+        const body: TaskInterface = {...event.task, done: event.isComplete};
+        this.tasksService.updateTask(event.task._id, body).pipe(
             tap(() => {
                 this.tasks.update((tasks) => {
-                    const taskIndex = tasks.findIndex((t) => t.id === task.id);
-                    if (taskIndex !== -1) tasks[taskIndex] = { ...task };
+                    const taskIndex = tasks.findIndex((t) => t._id === event.task._id);
+                    if (taskIndex !== -1) tasks[taskIndex] = body;
                     return tasks;
                 })
 

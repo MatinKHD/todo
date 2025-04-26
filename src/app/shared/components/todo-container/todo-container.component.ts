@@ -18,7 +18,7 @@ export class TodoContainerComponent {
 
   @Output() onDelete = new EventEmitter<string>();
   @Output() onEdit = new EventEmitter<TaskInterface>();
-  @Output() onMarkComplete = new EventEmitter<TaskInterface>();
+  @Output() onMarkComplete = new EventEmitter<{ task: TaskInterface, isComplete: boolean }>();
 
   handleOnDeleteTodo(id: string) {
     this.onDelete.emit(id);
@@ -28,7 +28,7 @@ export class TodoContainerComponent {
     this.onEdit.emit(task);
   }
 
-  handleOnMarkTodoComplete(event: TaskInterface) {
+  handleOnMarkTodoComplete(event: { task: TaskInterface, isComplete: boolean }) {
     this.onMarkComplete.emit(event);
   }
 

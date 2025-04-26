@@ -36,14 +36,14 @@ export class TodoComponent implements OnInit {
 
   @Output() onDelete = new EventEmitter<string>();
   @Output() onEdit = new EventEmitter<TaskInterface>();
-  @Output() onMarkComplete = new EventEmitter<TaskInterface>();
+  @Output() onMarkComplete = new EventEmitter<{ task: TaskInterface, isComplete: boolean }>();
 
   ngOnInit(): void {
     this.isCompletedControl.setValue(this.todo()?.done)
   }
 
   handleOnDelete(): void {
-    this.onDelete.emit(this.todo()?.id);
+    this.onDelete.emit(this.todo()?._id);
   }
 
   handleOnEdit(): void {
@@ -51,6 +51,6 @@ export class TodoComponent implements OnInit {
   }
 
   handleOnMarkComplete(): void {
-    this.onMarkComplete.emit(this.todo());
+    this.onMarkComplete.emit({ task: this.todo()!, isComplete: this.isCompletedControl.value });
   }
 }
