@@ -37,13 +37,16 @@
     </header>
     
     
-    
-    <app-todo-container
-        class="w-full"
-        [tasks]="tasks()"
-        (onDelete)="onDeleteTask($event)"
-        (onMarkComplete)="onMarkCompletedTask($event)"
-        (onEdit)="onEditTask($event)"
-    >
-    </app-todo-container>
+    @if(listDetail()) {
+        <app-todo-container
+            class="w-full"
+            [tasks]="tasks()"
+            [isMain]="listDetail()?.isMain!"
+            (onDelete)="onDeleteTask($event)"
+            (onMarkComplete)="onMarkCompletedTask($event)"
+            (onEdit)="onEditTask($event)"
+            (onMoveTodo)="onMoveTask($event)"
+        >
+        </app-todo-container>
+    }
 </div>
