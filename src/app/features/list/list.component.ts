@@ -9,6 +9,7 @@ import { TaskDialogComponent } from '../../shared/components/task-dialog/task-di
 import { TodoContainerComponent } from '../../shared/components/todo-container/todo-container.component';
 import { TaskInterface } from './../../shared/interfaces/task.interface';
 import { ListInterface } from '../../shared/interfaces/list.interface';
+import { ListStateService } from '../../shared/services/list-state.service';
 
 @Component({
   selector: 'app-list',
@@ -23,6 +24,7 @@ import { ListInterface } from '../../shared/interfaces/list.interface';
 export class ListComponent extends BaseTaskComponent {
 
   dialog = inject(MatDialog);
+  listStateService = inject(ListStateService)
 
   override getTasks(): Observable<TaskInterface[]> {
     return this.tasksService.getTasksOfList(this.listId);
@@ -58,13 +60,15 @@ export class ListComponent extends BaseTaskComponent {
       switchMap(res => {
         if (!res) return of(null);
         const body: ListInterface = {
-          _id: this.listDetail()?._id!,
+          ...this.listDetail()!,
           title: res,
-          date: new Date(),
-          isMain: this.listDetail()?.isMain!
         }
         this.listDetail.update(l => ({ ...l!, title: res }));
-        return this.listService.updateItem(this.listDetail()?._id!, body);
+        return this.listService.updateItem(this.listDetail()?._id!, body).pipe(
+          tap(() => {
+            this.listStateService.updateList(body)
+          })
+        );
       })
     ).subscribe();
   }
