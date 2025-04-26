@@ -1,6 +1,7 @@
 import { Component, inject, OnDestroy } from "@angular/core";
 import { catchError, EMPTY, Subscription } from "rxjs";
 import { SnackbarService } from "../../shared/services/snackbar.service";
+import { LocalRepository } from "../local-store/local-repository";
 
 
 @Component({
@@ -9,6 +10,7 @@ import { SnackbarService } from "../../shared/services/snackbar.service";
 export abstract class BaseComponent implements OnDestroy {
     subscriptions: Subscription[] = [];
     snackBar: SnackbarService = inject(SnackbarService);
+    _localRepository: LocalRepository = inject(LocalRepository);
 
     protected handleError(message: string) {
         return catchError(() => {
