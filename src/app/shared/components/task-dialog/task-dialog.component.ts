@@ -29,9 +29,9 @@ export class TaskDialogComponent implements OnInit {
   data: { isEditMode: boolean, task: TaskInterface, exisitngDates: string[] } = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef<TaskDialogComponent>);
   fb = inject(FormBuilder);
-  errorMessageForTitle = signal('');
   snackBar: SnackbarService = inject(SnackbarService);
 
+  errorMessageForTitle = signal('');
   titleControl = this.fb.control('', { validators: [Validators.required, Validators.maxLength(100)] });
   descriptionControl = this.fb.control('', { validators: Validators.maxLength(500) });
   dateControl = this.fb.control('', { validators: [Validators.required] });
@@ -42,20 +42,27 @@ export class TaskDialogComponent implements OnInit {
     if (this.data.isEditMode) this.patchForm();
   }
 
-  private patchForm() {
-    this.titleControl.setValue(this.data.task.title);
-    this.descriptionControl.setValue(this.data.task.description);
-    const date = new Date(this.data.task.date)
-    this.dateControl.setValue((this.data.task.date as string));
+  private patchForm(): void {
+    const { title, description, date } = this.data.task;
+    this.titleControl.setValue(title);
+    this.descriptionControl.setValue(description);
+
+    const parsedDate = new Date(date);
+    this.dateControl.setValue(parsedDate.toISOString().split('T')[0]); // Set date in YYYY-MM-DD format
+    this.timeControl.setValue(this.formatTime(parsedDate));
+  }
+
+  private formatTime(date: Date): string {
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
-    this.timeControl.setValue(`${hours}:${minutes}`);
+    return `${hours}:${minutes}`;
   }
 
   updateErrorMessageForTitle() {
     if (!this.titleControl) return;
     if (this.titleControl.hasError('required')) this.errorMessageForTitle.set(`title is required`);
     if (this.titleControl.hasError('maxlength')) this.errorMessageForTitle.set(`title must be 100 char maximum`)
+    else this.errorMessageForTitle.set('');
   }
 
   handleClose(body: any = null) {
@@ -63,25 +70,40 @@ export class TaskDialogComponent implements OnInit {
   }
 
   handleSubmit() {
-    if (this.dateControl.valid && this.timeControl.valid) {
-      const date = new Date(this.dateControl?.value!);
-      const [hours, minutes] = this.timeControl?.value!.split(':').map(Number);
-      date.setHours(hours, minutes, 0, 0);
+    if (this.formIsValid()) {
+      const date = this.combineDateAndTime();
       if (this.isDuplicateDate(date)) return this.snackBar.notification$.next('you already have task on this date');
       let body = {
         title: this.titleControl.value,
         description: this.descriptionControl.value,
         date: date.toISOString(),
       }
-      if (this.data) body = { ...this.data.task, ...body };
+      if (this.data.isEditMode) body = { ...this.data.task, ...body };
       this.handleClose(body)
     }
   }
 
+  private formIsValid(): boolean {
+    if (this.titleControl.invalid) {
+      this.updateErrorMessageForTitle();
+      return false;
+    }
+    if (this.dateControl.invalid || this.timeControl.invalid) {
+      this.snackBar.notification$.next('Please provide a valid date and time');
+      return false;
+    }
+    return true;
+  }
+
+  private combineDateAndTime(): Date {
+    const date = new Date(this.dateControl?.value!);
+    const [hours, minutes] = this.timeControl?.value!.split(':').map(Number);
+    date.setHours(hours, minutes, 0, 0);
+    return date;
+  }
+
   private isDuplicateDate(date: Date): boolean {
     if (this.data.isEditMode && this.data.task.date === date.toISOString()) return false;
-    return this.data.exisitngDates.length === 0
-      ? false
-      : this.data.exisitngDates.includes(date.toISOString())
+    return this.data.exisitngDates.includes(date.toISOString())
   }
 }
