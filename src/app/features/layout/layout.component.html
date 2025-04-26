@@ -15,7 +15,7 @@
       @for (item of navItems; track $index) {
         <mat-list-item [routerLink]="item.route" class="mb-2" >
           <div class="flex items-center">
-            <span>{{ item.name }}</span>
+            <span>{{ item.title }}</span>
             <mat-icon class="mx-2">{{ item.icon }}</mat-icon>          
           </div>
         </mat-list-item>
