@@ -17,6 +17,10 @@ export class ListService extends BaseService {
     return this.getAll<ListInterface[]>('lists')
   }
 
+  getDailyTaskListDetail(): Observable<ListInterface> {
+    return this.getAll<ListInterface>('mainList');
+  }
+
   getListDetail(id: string): Observable<ListInterface> {
     return this.getAll<ListInterface>(`lists/${id}`);
   }

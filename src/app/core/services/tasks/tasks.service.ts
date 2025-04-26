@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { BaseService } from '../base.service';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CreateTask, TaskInterface } from '../../../shared/interfaces/task.interface';
+import { BaseService } from '../base.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +19,6 @@ export class TasksService extends BaseService {
 
   getCompletedTasks(): Observable<TaskInterface[]> {
      return this.getAll<TaskInterface[]>('compeleted');
-  }
-
-  getDailyTasks(): Observable<TaskInterface[]> {
-    return this.getAll<TaskInterface[]>('mainList');
   }
 
   getTasksOfList(listId: string): Observable<TaskInterface[]> {
