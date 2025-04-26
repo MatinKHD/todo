@@ -42,6 +42,11 @@
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
+
+              <mat-form-field class="w-full mb-4">
+                <mat-label>Choose a time</mat-label>
+                <input matInput type="time" [formControl]="timeControl" />
+              </mat-form-field>
          <div class="w-full flex justify-end">
            <button mat-flat-button color="primary" class="text-lg" [disabled]="titleControl?.invalid || descriptionControl.invalid" (click)="handleSubmit()">{{data ? 'Edit': 'Create'}}</button>
          </div>

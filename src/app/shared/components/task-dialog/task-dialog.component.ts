@@ -7,6 +7,8 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { TaskInterface } from '../../interfaces/task.interface';
+import { SnackbarService } from '../../services/snackbar.service';
 
 @Component({
   selector: 'app-task-dialog',
@@ -24,24 +26,31 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './task-dialog.component.scss'
 })
 export class TaskDialogComponent implements OnInit {
-  data = inject(MAT_DIALOG_DATA);
+  data: { isEditMode: boolean, task: TaskInterface, exisitngDates: string[] } = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef<TaskDialogComponent>);
   fb = inject(FormBuilder);
   errorMessageForTitle = signal('');
+  snackBar: SnackbarService = inject(SnackbarService);
 
   titleControl = this.fb.control('', { validators: [Validators.required, Validators.maxLength(100)] });
   descriptionControl = this.fb.control('', { validators: Validators.maxLength(500) });
-  dateControl = this.fb.control('')
+  dateControl = this.fb.control('', { validators: [Validators.required] });
+  timeControl = this.fb.control('', { validators: [Validators.required] });
 
 
   ngOnInit(): void {
-    if(this.data) this.patchForm();
+    if (this.data.isEditMode) this.patchForm();
   }
 
   private patchForm() {
-    this.titleControl.setValue(this.data.title);
-    this.descriptionControl.setValue(this.data.description);
-    this.dateControl.setValue(this.data.date);
+    this.titleControl.setValue(this.data.task.title);
+    this.descriptionControl.setValue(this.data.task.description);
+    const date = new Date(this.data.task.date)
+    this.dateControl.setValue((this.data.task.date as string));
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    this.timeControl.setValue(`${hours}:${minutes}`);
+
   }
 
   updateErrorMessageForTitle() {
@@ -55,12 +64,22 @@ export class TaskDialogComponent implements OnInit {
   }
 
   handleSubmit() {
-    let body = {
-      title: this.titleControl.value,
-      description: this.descriptionControl.value,
-      date: this.dateControl.value,
+    if (this.dateControl.valid && this.timeControl.valid) {
+      const date = new Date(this.dateControl?.value!);
+      const [hours, minutes] = this.timeControl?.value!.split(':').map(Number);
+      date.setHours(hours, minutes, 0, 0);
+      if (this.isDuplicateDate(date)) return this.snackBar.notification$.next('you already have task on this date');
+      let body = {
+        title: this.titleControl.value,
+        description: this.descriptionControl.value,
+        date: date,
+      }
+      if (this.data) body = { ...this.data, ...body };
+      this.handleClose(body)
     }
-    if (this.data) body = { ...this.data, ...body };
-    this.handleClose(body)
+  }
+
+  private isDuplicateDate(date: Date): boolean {
+    return this.data.exisitngDates.includes(date.toISOString())
   }
 }
