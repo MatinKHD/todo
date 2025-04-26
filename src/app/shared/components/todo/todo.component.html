@@ -1,4 +1,4 @@
-<mat-expansion-panel class="flex flex-wrap border border-gray-300 rounded-lg shadow-sm" (afterExpand)="isExpanded = true" (afterCollapse)="isExpanded = false" [expanded]="isExpanded" >
+<mat-expansion-panel class="flex flex-wrap border border-gray-300 rounded-lg shadow-sm !mb-4" (afterExpand)="isExpanded = true" (afterCollapse)="isExpanded = false" [expanded]="isExpanded" >
     <mat-expansion-panel-header class="flex flex-wrap items-center">
       <mat-panel-title class="font-semibold text-sm lg:text-lg xl:text-xl 2xl:text-2xl" [ngClass]="[isExpanded ? 'w-full' : 'w-1/2']">
         {{ isExpanded ? todo()?.title : (todo()?.title! | truncate) }}
