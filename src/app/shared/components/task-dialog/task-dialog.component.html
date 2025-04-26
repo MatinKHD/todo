@@ -1,6 +1,6 @@
 <section class="w-full bg-white rounded-lg flex flex-wrap justify-center px-4">
     <header class="w-full flex items-center justify-between my-4">
-        <h1 class="text-lg font-semibold">Inserting tasks in {{data.listName}}</h1>
+        <h1 class="text-lg font-semibold">{{data ? 'Editing' : 'Inserting'}} task</h1>
         <button
             mat-icon-button
             color="warn"
@@ -28,8 +28,8 @@
               </mat-form-field>
 
               <mat-form-field class="w-full mb-4">
-                <mat-label>Textarea</mat-label>
-                <textarea matInput [formControl]="descriptionControl" maxlength="500"></textarea>
+                <mat-label>Description</mat-label>
+                <textarea matInput [formControl]="descriptionControl" placeholder="description" maxlength="500"></textarea>
                 @if (descriptionControl?.invalid) {
                   <mat-error>{{errorMessageForTitle()}}</mat-error>
                 }
@@ -42,7 +42,8 @@
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
-         
-        <button mat-flat-button color="primary" class="text-lg" [disabled]="titleControl?.invalid || descriptionControl.invalid" (click)="handleSubmit()">Create</button>
+         <div class="w-full flex justify-end">
+           <button mat-flat-button color="primary" class="text-lg" [disabled]="titleControl?.invalid || descriptionControl.invalid" (click)="handleSubmit()">{{data ? 'Edit': 'Create'}}</button>
+         </div>
     </main>
 </section>

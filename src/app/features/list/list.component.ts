@@ -1,17 +1,16 @@
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 import { Observable, of, switchMap, tap } from 'rxjs';
 import { BaseTaskComponent } from '../../core/components/base-task.component';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { CreateListDialogComponent } from '../../shared/components/create-list-dialog/create-list-dialog.component';
 import { TaskDialogComponent } from '../../shared/components/task-dialog/task-dialog.component';
 import { TodoContainerComponent } from '../../shared/components/todo-container/todo-container.component';
-import { TaskInterface } from './../../shared/interfaces/task.interface';
 import { ListInterface } from '../../shared/interfaces/list.interface';
 import { ListStateService } from '../../shared/services/list-state.service';
-import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import { Router } from '@angular/router';
+import { CreateTask, TaskInterface } from './../../shared/interfaces/task.interface';
 
 @Component({
   selector: 'app-list',
@@ -25,7 +24,6 @@ import { Router } from '@angular/router';
 })
 export class ListComponent extends BaseTaskComponent {
 
-  dialog = inject(MatDialog);
   listStateService = inject(ListStateService);
   router: Router = inject(Router)
 
@@ -34,17 +32,13 @@ export class ListComponent extends BaseTaskComponent {
   }
 
   handleAddTasks() {
-    this.dialog.open(TaskDialogComponent, {
-      data: {
-        listName: this.listDetail()?.title
-      }
-    }).afterClosed().pipe(
+    this.dialog.open(TaskDialogComponent).afterClosed().pipe(
       switchMap((res) => {
         if (!res) of(null);
-        const body: Omit<TaskInterface, '_id'> = {
-          title: res.title,
-          description: res.description,
-          date: res.date,
+        const body: CreateTask = {
+          title: res?.title,
+          description: res?.description,
+          date: res?.date,
           done: false,
           list: this.listDetail()!
         }
@@ -80,13 +74,13 @@ export class ListComponent extends BaseTaskComponent {
     this.dialog.open(ConfirmDialogComponent, {
       data: { title: `Confirm Action`, message: `Are you sure you want Remove ${this.listDetail()?.title}` }
     }).afterClosed().pipe(
-      switchMap(res => 
+      switchMap(res =>
         res ? this.removeListItem() : of(null)
       )
     ).subscribe();
   }
 
-  private removeListItem():Observable<ListInterface> {
+  private removeListItem(): Observable<ListInterface> {
     return this.listService.removeItem(this.listDetail()?._id!).pipe(
       tap(() => this.listStateService.removeItem(this.listDetail()!)),
       tap(() => this.router.navigate(['']))

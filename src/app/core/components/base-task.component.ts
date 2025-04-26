@@ -1,11 +1,13 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { Observable, switchMap, tap } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, of, switchMap, tap } from 'rxjs';
 import { BaseComponent } from '../../core/components/base.component';
 import { TasksService } from '../../core/services/tasks/tasks.service';
-import { TaskInterface } from '../../shared/interfaces/task.interface';
-import { ActivatedRoute } from '@angular/router';
-import { ListService } from '../services/list/list.service';
+import { TaskDialogComponent } from '../../shared/components/task-dialog/task-dialog.component';
 import { ListInterface } from '../../shared/interfaces/list.interface';
+import { TaskInterface } from '../../shared/interfaces/task.interface';
+import { ListService } from '../services/list/list.service';
 
 @Component({
     template: ``
@@ -14,6 +16,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
     tasksService = inject(TasksService);
     listService = inject(ListService);
     activatedRoute = inject(ActivatedRoute);
+    dialog = inject(MatDialog);
     tasks = signal<TaskInterface[]>([]);
     listId!: string;
     listDetail = signal<ListInterface | undefined>(undefined);
@@ -49,34 +52,32 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
     }
 
     onEditTask(task: TaskInterface): void {
-        this.tasksService.updateTask(task._id, task).pipe(
-            tap(() => {
-                this.tasks.update((tasks) => {
-                    const taskIndex = tasks.findIndex((t) => t._id === task._id);
-                    if (taskIndex !== -1) {
-                        tasks[taskIndex] = { ...tasks[taskIndex], ...task };
-                    }
-                    return tasks;
-                });
-            }),
-            this.handleError(`Something went wrong, Can't edit`)
+        this.dialog.open(TaskDialogComponent, {
+            data: { ...task }
+        }).afterClosed().pipe(
+            switchMap((res) => {
+                return res ? this.updateTask(res).pipe(this.handleError(`Something went wrong, Can't edit`)) : of(null)
+            })
         ).subscribe();
     }
 
     onMarkCompletedTask(event: { task: TaskInterface, isComplete: boolean }): void {
-        const body: TaskInterface = {...event.task, done: event.isComplete};
-        this.tasksService.updateTask(event.task._id, body).pipe(
+        const body: TaskInterface = { ...event.task, done: event.isComplete };
+        this.updateTask(body).pipe(
+            this.handleError('Something wrong, please try again')
+        ).subscribe()
+    }
+
+    private updateTask(task: TaskInterface): Observable<TaskInterface> {
+        return this.tasksService.updateTask(task._id, task).pipe(
             tap(() => {
                 this.tasks.update((tasks) => {
-                    const taskIndex = tasks.findIndex((t) => t._id === event.task._id);
-                    if (taskIndex !== -1) tasks[taskIndex] = body;
+                    const taskIndex = tasks.findIndex((t) => t._id === task._id);
+                    if (taskIndex !== -1) tasks[taskIndex] = task;
                     return tasks;
                 })
 
             }),
-            this.handleError('Something wrong, please try again')
-        ).subscribe();
+        )
     }
-
-
 }

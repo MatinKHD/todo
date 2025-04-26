@@ -35,7 +35,13 @@ export class TaskDialogComponent implements OnInit {
 
 
   ngOnInit(): void {
+    if(this.data) this.patchForm();
+  }
 
+  private patchForm() {
+    this.titleControl.setValue(this.data.title);
+    this.descriptionControl.setValue(this.data.description);
+    this.dateControl.setValue(this.data.date);
   }
 
   updateErrorMessageForTitle() {
@@ -49,11 +55,12 @@ export class TaskDialogComponent implements OnInit {
   }
 
   handleSubmit() {
-    const body = {
+    let body = {
       title: this.titleControl.value,
       description: this.descriptionControl.value,
       date: this.dateControl.value,
     }
+    if (this.data) body = { ...this.data, ...body };
     this.handleClose(body)
   }
 }
