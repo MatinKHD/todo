@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, switchMap, tap } from 'rxjs';
@@ -39,7 +39,13 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
     }
 
     handleAddTasks() {
-        this.dialog.open(TaskDialogComponent).afterClosed().pipe(
+        this.dialog.open(TaskDialogComponent, {
+            data: {
+                isEditMode: false,
+                exisitngDates:  this.tasks().map((t) => t.date)
+            }
+
+        }).afterClosed().pipe(
             switchMap((res) => {
                 if (!res) of(null);
                 const body: CreateTask = {
@@ -67,7 +73,11 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
 
     onEditTask(task: TaskInterface): void {
         this.dialog.open(TaskDialogComponent, {
-            data: { ...task }
+            data: { 
+                task, 
+                isEditMode: true,
+                existingDates:  this.tasks().map((t) => t.date) 
+            }
         }).afterClosed().pipe(
             switchMap((res) => {
                 return res ? this.updateTask(res).pipe(this.handleError(`Something went wrong, Can't edit`)) : of(null)
