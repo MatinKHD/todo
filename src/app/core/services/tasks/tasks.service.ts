@@ -29,12 +29,8 @@ export class TasksService extends BaseService {
     return this.getAll<TaskInterface[]>(`tasks/query/${listId}`)
   }
 
-  findTaskByListId(listId: string): Observable<TaskInterface> {
-    return this.getByDetail<TaskInterface>('tasks/query/', listId);
-  }
-
   getTaskById(id: string): Observable<CreateTask> {
-    return this.getByDetail<CreateTask>('tasks/', id);
+    return this.getByDetail<CreateTask>('tasks', id);
   }
 
   updateTask(id:string, body: TaskInterface): Observable<TaskInterface> {
@@ -42,10 +38,10 @@ export class TasksService extends BaseService {
   }
 
   createTask( body: CreateTask): Observable<TaskInterface> {
-    return this.post<TaskInterface, CreateTask>('tasks/', body);
+    return this.post<TaskInterface, CreateTask>('tasks', body);
   }
 
   deleteTask(id: string): Observable<TaskInterface> {
-    return this.delete<TaskInterface>('tasks/', id);
+    return this.delete<TaskInterface>('tasks', id);
   }
 }
