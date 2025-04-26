@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy } from "@angular/core";
-import { catchError, EMPTY, Subscription } from "rxjs";
+import { catchError, EMPTY, Observable, Subscription } from "rxjs";
 import { SnackbarService } from "../../shared/services/snackbar.service";
 import { LocalRepository } from "../local-store/local-repository";
 
@@ -12,7 +12,7 @@ export abstract class BaseComponent implements OnDestroy {
     snackBar: SnackbarService = inject(SnackbarService);
     _localRepository: LocalRepository = inject(LocalRepository);
 
-    protected handleError(message: string) {
+    protected handleError<T>(message: string): (source: Observable<T>) => Observable<T> {
         return catchError(() => {
             this.snackBar.notification$.next(message);
             return EMPTY;
