@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { TaskInterface } from '../../interfaces/task.interface';
+import { DateColorPipe } from '../../pipes/date-color.pipe';
 
 @Component({
   selector: 'app-todo',
@@ -21,7 +22,8 @@ import { TaskInterface } from '../../interfaces/task.interface';
     MatTooltipModule,
     NgClass,
     NgTemplateOutlet,
-    TruncatePipe
+    TruncatePipe,
+    DateColorPipe
   ],
   templateUrl: './todo.component.html',
   styleUrl: './todo.component.scss'
