@@ -25,7 +25,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
     abstract getTasks(): Observable<TaskInterface[]>;
 
     ngOnInit(): void {
-        this.activatedRoute.params.pipe(
+        const sub = this.activatedRoute.params.pipe(
             tap(params => {
                 if (!params['id']) return;
                 this.listId = params['id']
@@ -34,6 +34,8 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
             switchMap(() => this.getTasks()),
             tap((res) => this.tasks.set(res))
         ).subscribe();
+
+        this.subscriptions.push(sub)
     }
 
     handleAddTasks() {
