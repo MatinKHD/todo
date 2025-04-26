@@ -5,7 +5,7 @@ export interface TaskInterface {
     title:string, 
     description: string, 
     done: boolean, 
-    date: Date, 
+    date: Date | string, 
     list: ListInterface
 }
 
