@@ -10,6 +10,8 @@ import { TodoContainerComponent } from '../../shared/components/todo-container/t
 import { TaskInterface } from './../../shared/interfaces/task.interface';
 import { ListInterface } from '../../shared/interfaces/list.interface';
 import { ListStateService } from '../../shared/services/list-state.service';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -24,7 +26,8 @@ import { ListStateService } from '../../shared/services/list-state.service';
 export class ListComponent extends BaseTaskComponent {
 
   dialog = inject(MatDialog);
-  listStateService = inject(ListStateService)
+  listStateService = inject(ListStateService);
+  router: Router = inject(Router)
 
   override getTasks(): Observable<TaskInterface[]> {
     return this.tasksService.getTasksOfList(this.listId);
@@ -71,6 +74,23 @@ export class ListComponent extends BaseTaskComponent {
         );
       })
     ).subscribe();
+  }
+
+  handleRemoveList() {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: { title: `Confirm Action`, message: `Are you sure you want Remove ${this.listDetail()?.title}` }
+    }).afterClosed().pipe(
+      switchMap(res => 
+        res ? this.removeListItem() : of(null)
+      )
+    ).subscribe();
+  }
+
+  private removeListItem():Observable<ListInterface> {
+    return this.listService.removeItem(this.listDetail()?._id!).pipe(
+      tap(() => this.listStateService.removeItem(this.listDetail()!)),
+      tap(() => this.router.navigate(['']))
+    )
   }
 
 }
