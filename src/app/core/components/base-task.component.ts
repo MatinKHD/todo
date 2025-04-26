@@ -21,6 +21,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
     tasks = signal<TaskInterface[]>([]);
     listId!: string;
     listDetail = signal<ListInterface | undefined>(undefined);
+    existingDates = signal<string[]>([]);
 
     abstract getTasks(): Observable<TaskInterface[]>;
 
@@ -32,7 +33,8 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
             }),
             switchMap(() => this.getListDetail()),
             switchMap(() => this.getTasks()),
-            tap((res) => this.tasks.set(res))
+            tap((res) => this.tasks.set(res)),
+            tap(() => this.existingDates.set(this.tasks().map((t) => t.date.toString()))),
         ).subscribe();
 
         this.subscriptions.push(sub)
@@ -42,7 +44,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
         this.dialog.open(TaskDialogComponent, {
             data: {
                 isEditMode: false,
-                exisitngDates:  this.tasks().map((t) => t.date)
+                exisitngDates:  this.existingDates()
             }
 
         }).afterClosed().pipe(
@@ -76,7 +78,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
             data: { 
                 task, 
                 isEditMode: true,
-                exisitngDates:  this.tasks().map((t) => t.date) 
+                exisitngDates:  this.existingDates() 
             }
         }).afterClosed().pipe(
             switchMap((res) => {
@@ -106,6 +108,8 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
                 this.tasks.update((tasks) => {
                     const taskIndex = tasks.findIndex((t) => t._id === task._id);
                     if (taskIndex !== -1) tasks[taskIndex] = task;
+                    
+                    this.existingDates.set(tasks.map((t) => t.date.toString()))
                     return tasks;
                 })
             }),
