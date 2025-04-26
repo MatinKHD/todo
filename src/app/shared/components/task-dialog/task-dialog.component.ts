@@ -71,7 +71,7 @@ export class TaskDialogComponent implements OnInit {
       let body = {
         title: this.titleControl.value,
         description: this.descriptionControl.value,
-        date: date,
+        date: date.toISOString(),
       }
       if (this.data) body = { ...this.data.task, ...body };
       this.handleClose(body)
