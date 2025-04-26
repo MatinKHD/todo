@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, of, switchMap, tap } from 'rxjs';
 import { BaseComponent } from '../../core/components/base.component';
 import { TasksService } from '../../core/services/tasks/tasks.service';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { TaskDialogComponent } from '../../shared/components/task-dialog/task-dialog.component';
 import { ListInterface } from '../../shared/interfaces/list.interface';
 import { CreateTask, TaskInterface } from '../../shared/interfaces/task.interface';
@@ -55,9 +56,10 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
     }
 
     onDeleteTask(id: string): void {
-        this.tasksService.deleteTask(id).pipe(
-            tap(() => this.tasks.update((tasks) => tasks.filter((task) => task._id !== id))),
-            this.handleError(`Something went wrong, Please try again`)
+        this.dialog.open(ConfirmDialogComponent, {
+            data: { title: 'Confirm Delete', message: 'Are you sure you want to delete this task?' }
+        }).afterClosed().pipe(
+            switchMap(res => res ? this.deleteTask(id) : of(null))
         ).subscribe();
     }
 
@@ -78,6 +80,14 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
         ).subscribe()
     }
 
+    private deleteTask(id: string): Observable<TaskInterface | unknown> {
+        return this.tasksService.deleteTask(id).pipe(
+            tap(() => this.tasks.update((tasks) => tasks.filter((task) => task._id !== id))),
+            tap(() => this.snackBar.notification$.next('Task deleted successfully')),
+            this.handleError(`Something went wrong, Please try again`)
+        )
+    }
+
     private updateTask(task: TaskInterface): Observable<TaskInterface> {
         return this.tasksService.updateTask(task._id, task).pipe(
             tap(() => {
@@ -86,7 +96,6 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
                     if (taskIndex !== -1) tasks[taskIndex] = task;
                     return tasks;
                 })
-
             }),
         )
     }
