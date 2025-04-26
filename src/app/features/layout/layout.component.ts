@@ -7,7 +7,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { map, Observable, of, switchMap, tap } from 'rxjs';
+import { Observable, of, switchMap, tap } from 'rxjs';
 import { LocalRepository } from '../../core/local-store/local-repository';
 import { ListService } from '../../core/services/list/list.service';
 import { CreateListDialogComponent } from '../../shared/components/create-list-dialog/create-list-dialog.component';
@@ -73,10 +73,26 @@ export class LayoutComponent implements OnInit {
 
 
   handleAddList(): void {
-    this.dialog.open(CreateListDialogComponent).afterClosed().pipe(
+    this.dialog.open(CreateListDialogComponent, {
+      data: { isEditMode: false, title: '' }
+    }).afterClosed().pipe(
       switchMap((res) => {
         if (!res) return of(null);
-        return this.listService.insertItemToList(res)
+        const body: Omit<ListInterface, '_id'> = {
+          title: res,
+          date: new Date(),
+          isMain: false
+        }
+        return this.listService.insertItemToList(body);
+      }),
+      tap((res) => {
+        if (!res) return;
+        const navItem = {
+          name: res.title,
+          route: `list/${res._id}`,
+          icon: ''
+        }
+        this.navItems = [...this.navItems, navItem]
       })
     ).subscribe();
   }
@@ -84,7 +100,7 @@ export class LayoutComponent implements OnInit {
   private getListItems(): Observable<ListInterface[]> {
     return this.listService.getAllLists().pipe(
       tap(res => {
-        const navItems = res.map(x => ({name: x.title, route: `list/${x.id}`, icon: null}))
+        const navItems = res.map(x => ({ name: x.title, route: `list/${x._id}`, icon: null }))
         this.navItems = [...this.navItems, ...navItems]
       })
     )
