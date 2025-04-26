@@ -1,4 +1,4 @@
-import { DatePipe, NgClass, NgTemplateOutlet } from '@angular/common';
+import { DatePipe, NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, EventEmitter, input, OnInit, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,7 +23,9 @@ import { DateColorPipe } from '../../pipes/date-color.pipe';
     NgClass,
     NgTemplateOutlet,
     TruncatePipe,
-    DateColorPipe
+    DateColorPipe,
+    NgIf,
+    MatTooltipModule
   ],
   templateUrl: './todo.component.html',
   styleUrl: './todo.component.scss'
@@ -31,6 +33,7 @@ import { DateColorPipe } from '../../pipes/date-color.pipe';
 export class TodoComponent implements OnInit {
 
   todo = input<TaskInterface>();
+  isMain = input<boolean>(false);
 
   isCompletedControl: FormControl = new FormControl(false);
 
@@ -38,6 +41,7 @@ export class TodoComponent implements OnInit {
 
   @Output() onDelete = new EventEmitter<string>();
   @Output() onEdit = new EventEmitter<TaskInterface>();
+  @Output() onMoveTodo = new EventEmitter<TaskInterface>();
   @Output() onMarkComplete = new EventEmitter<{ task: TaskInterface, isComplete: boolean }>();
 
   ngOnInit(): void {
@@ -54,5 +58,9 @@ export class TodoComponent implements OnInit {
 
   handleOnMarkComplete(): void {
     this.onMarkComplete.emit({ task: this.todo()!, isComplete: this.isCompletedControl.value });
+  }
+
+  handleMoveTodo(): void {
+    this.onMoveTodo.emit(this.todo())
   }
 }

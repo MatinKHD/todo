@@ -28,6 +28,18 @@
         >
             <mat-icon>edit</mat-icon>
         </button>
+        @if(!isMain()) {
+            <button
+                mat-icon-button
+                color="primary"
+                matTooltip="move todo to daily tasks"
+                class="hover:text-accent-50"
+                (click)="handleMoveTodo()"
+            >
+                <mat-icon>home</mat-icon>
+            </button>
+        }
+        
         <button
             mat-icon-button
             color="warn"

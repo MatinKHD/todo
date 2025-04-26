@@ -15,10 +15,12 @@ import { NgFor } from '@angular/common';
 export class TodoContainerComponent {
 
   tasks = input<TaskInterface[]>([]);
+  isMain = input<boolean>(false);
 
   @Output() onDelete = new EventEmitter<string>();
   @Output() onEdit = new EventEmitter<TaskInterface>();
   @Output() onMarkComplete = new EventEmitter<{ task: TaskInterface, isComplete: boolean }>();
+  @Output() onMoveTodo = new EventEmitter<TaskInterface>();
 
   handleOnDeleteTodo(id: string) {
     this.onDelete.emit(id);
@@ -30,6 +32,10 @@ export class TodoContainerComponent {
 
   handleOnMarkTodoComplete(event: { task: TaskInterface, isComplete: boolean }) {
     this.onMarkComplete.emit(event);
+  }
+
+  handleOnMoveTodo(event: TaskInterface) {
+    this.onMoveTodo.emit(event)
   }
 
 }
