@@ -50,7 +50,6 @@ export class TaskDialogComponent implements OnInit {
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     this.timeControl.setValue(`${hours}:${minutes}`);
-
   }
 
   updateErrorMessageForTitle() {
@@ -74,12 +73,14 @@ export class TaskDialogComponent implements OnInit {
         description: this.descriptionControl.value,
         date: date,
       }
-      if (this.data) body = { ...this.data, ...body };
+      if (this.data) body = { ...this.data.task, ...body };
       this.handleClose(body)
     }
   }
 
   private isDuplicateDate(date: Date): boolean {
-    return this.data.exisitngDates.includes(date.toISOString())
+    return this.data.exisitngDates.length === 0
+      ? false
+      : this.data.exisitngDates.includes(date.toISOString())
   }
 }
