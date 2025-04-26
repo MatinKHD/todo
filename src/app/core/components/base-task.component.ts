@@ -6,7 +6,7 @@ import { BaseComponent } from '../../core/components/base.component';
 import { TasksService } from '../../core/services/tasks/tasks.service';
 import { TaskDialogComponent } from '../../shared/components/task-dialog/task-dialog.component';
 import { ListInterface } from '../../shared/interfaces/list.interface';
-import { TaskInterface } from '../../shared/interfaces/task.interface';
+import { CreateTask, TaskInterface } from '../../shared/interfaces/task.interface';
 import { ListService } from '../services/list/list.service';
 
 @Component({
@@ -35,13 +35,23 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
         ).subscribe();
     }
 
-    private getListDetail(): Observable<ListInterface> {
-        return this.listService.getListDetail(this.listId).pipe(
+    handleAddTasks() {
+        this.dialog.open(TaskDialogComponent).afterClosed().pipe(
+            switchMap((res) => {
+                if (!res) of(null);
+                const body: CreateTask = {
+                    title: res?.title,
+                    description: res?.description,
+                    date: res?.date,
+                    done: false,
+                    list: this.listDetail()!
+                }
+                return this.tasksService.createTask(body)
+            }),
             tap((res) => {
-                if (!res) return;
-                this.listDetail.set(res)
+                this.tasks.update((tasks) => [...tasks, res])
             })
-        )
+        ).subscribe();
     }
 
     onDeleteTask(id: string): void {
@@ -78,6 +88,15 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
                 })
 
             }),
+        )
+    }
+
+    private getListDetail(): Observable<ListInterface> {
+        return this.listService.getListDetail(this.listId).pipe(
+            tap((res) => {
+                if (!res) return;
+                this.listDetail.set(res)
+            })
         )
     }
 }

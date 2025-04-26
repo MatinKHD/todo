@@ -6,11 +6,10 @@ import { Observable, of, switchMap, tap } from 'rxjs';
 import { BaseTaskComponent } from '../../core/components/base-task.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { CreateListDialogComponent } from '../../shared/components/create-list-dialog/create-list-dialog.component';
-import { TaskDialogComponent } from '../../shared/components/task-dialog/task-dialog.component';
 import { TodoContainerComponent } from '../../shared/components/todo-container/todo-container.component';
 import { ListInterface } from '../../shared/interfaces/list.interface';
 import { ListStateService } from '../../shared/services/list-state.service';
-import { CreateTask, TaskInterface } from './../../shared/interfaces/task.interface';
+import { TaskInterface } from './../../shared/interfaces/task.interface';
 
 @Component({
   selector: 'app-list',
@@ -29,25 +28,6 @@ export class ListComponent extends BaseTaskComponent {
 
   override getTasks(): Observable<TaskInterface[]> {
     return this.tasksService.getTasksOfList(this.listId);
-  }
-
-  handleAddTasks() {
-    this.dialog.open(TaskDialogComponent).afterClosed().pipe(
-      switchMap((res) => {
-        if (!res) of(null);
-        const body: CreateTask = {
-          title: res?.title,
-          description: res?.description,
-          date: res?.date,
-          done: false,
-          list: this.listDetail()!
-        }
-        return this.tasksService.createTask(body)
-      }),
-      tap((res) => {
-        this.tasks.update((tasks) => [...tasks, res])
-      })
-    ).subscribe();
   }
 
   handleChangeName() {
