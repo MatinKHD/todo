@@ -55,10 +55,12 @@ export class LayoutComponent extends BaseComponent implements OnInit {
     if (!this._localRepository.IsInBrowser) return;
     this.isDesktop = window.innerWidth > 768;
 
-    const sub = this.getListItems().pipe(
+    const sub = this.getAllLists().pipe(
       switchMap(() => {
         return this.listStateService.lists$.pipe(
-          map(res => res.map(x => ({ ...x, route: `list/${x._id}`, icon: null }))),
+          map(res => res.map(x => {
+            return { ...x, route: x.isMain ? '/home' :`list/${x._id}`, icon: x.isMain ? 'home' :null }
+          })),
           tap((res) => this.navItems = res),
           tap(() => this.navItems.push({
             _id: '',
@@ -102,7 +104,7 @@ export class LayoutComponent extends BaseComponent implements OnInit {
     ).subscribe();
   }
 
-  private getListItems(): Observable<ListInterface[]> {
+  private getAllLists(): Observable<ListInterface[]> {
     return this.listService.getAllLists().pipe(
       tap(res => {
         this.listStateService.setLists(res);
