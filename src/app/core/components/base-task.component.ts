@@ -49,7 +49,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
 
         }).afterClosed().pipe(
             switchMap((res) => {
-                if (!res) of(null);
+                if (!res) return of(null);
                 const body: CreateTask = {
                     title: res?.title,
                     description: res?.description,
@@ -60,7 +60,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
                 return this.tasksService.createTask(body)
             }),
             tap((res) => {
-                this.tasks.update((tasks) => [...tasks, res])
+                res && this.tasks.update((tasks) => [...tasks, res])
             })
         ).subscribe();
     }
@@ -78,7 +78,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
             data: { 
                 task, 
                 isEditMode: true,
-                exisitngDates:  this.existingDates() 
+                exisitngDates:  this.existingDates()
             }
         }).afterClosed().pipe(
             switchMap((res) => {

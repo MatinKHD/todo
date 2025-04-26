@@ -1,6 +1,6 @@
 <section class="w-full bg-white rounded-lg flex flex-wrap justify-center px-4">
     <header class="w-full flex items-center justify-between my-4">
-        <h1 class="text-lg font-semibold">{{data ? 'Editing' : 'Inserting'}} task</h1>
+        <h1 class="text-lg font-semibold">{{data.isEditMode ? 'Editing' : 'Inserting'}} task</h1>
         <button
             mat-icon-button
             color="warn"
@@ -48,7 +48,15 @@
                 <input matInput type="time" [formControl]="timeControl" />
               </mat-form-field>
          <div class="w-full flex justify-end">
-           <button mat-flat-button color="primary" class="text-lg" [disabled]="titleControl?.invalid || descriptionControl.invalid" (click)="handleSubmit()">{{data ? 'Edit': 'Create'}}</button>
+           <button 
+            mat-flat-button 
+            color="primary" 
+            class="text-lg" 
+            [disabled]="titleControl?.invalid || descriptionControl.invalid" 
+            (click)="handleSubmit()"
+          >
+            {{data.isEditMode ? 'Edit': 'Create'}}
+          </button>
          </div>
     </main>
 </section>
