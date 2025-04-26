@@ -2,8 +2,9 @@
     <header class="w-full flex justify-between">
         <div class="w-1/2 flex">
             <h1 class="text-3xl font-semibold mb-4">
-                ListName Tasks
+                {{listDetail()?.title}} Tasks
             </h1>
+            @if (!listDetail()?.isMain) {
             <button 
                 mat-icon-button
                 color="primary"
@@ -11,6 +12,7 @@
                 class="hover:text-accent-50 mx-2">
                 <mat-icon>edit</mat-icon>
             </button>
+            }
         </div>
 
         <button 

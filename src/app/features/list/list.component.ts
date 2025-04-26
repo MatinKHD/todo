@@ -8,6 +8,7 @@ import { CreateListDialogComponent } from '../../shared/components/create-list-d
 import { TaskDialogComponent } from '../../shared/components/task-dialog/task-dialog.component';
 import { TodoContainerComponent } from '../../shared/components/todo-container/todo-container.component';
 import { TaskInterface } from './../../shared/interfaces/task.interface';
+import { ListInterface } from '../../shared/interfaces/list.interface';
 
 @Component({
   selector: 'app-list',
@@ -30,7 +31,7 @@ export class ListComponent extends BaseTaskComponent {
   handleAddTasks() {
     this.dialog.open(TaskDialogComponent, {
       data: {
-        listName: this.listDetail.title
+        listName: this.listDetail()?.title
       }
     }).afterClosed().pipe(
       switchMap((res) => {
@@ -40,7 +41,7 @@ export class ListComponent extends BaseTaskComponent {
           description: res.description,
           date: res.date,
           done: false,
-          list: this.listDetail
+          list: this.listDetail()!
         }
         return this.tasksService.createTask(body)
       }),
@@ -52,7 +53,22 @@ export class ListComponent extends BaseTaskComponent {
 
   handleChangeName() {
     this.dialog.open(CreateListDialogComponent, {
-      data: { isEditMode: true, title: '' }
-    })
+      data: { isEditMode: true, title: this.listDetail()?.title }
+    }).afterClosed().pipe(
+      switchMap(res => {
+        if (!res) return of(null);
+        const body: ListInterface = {
+          _id: this.listDetail()?._id!,
+          title: res,
+          date: new Date(),
+          isMain: this.listDetail()?.isMain!
+        }
+        this.listDetail.update(l => ({ ...l!, title: res }));
+        return this.listService.updateItem(this.listDetail()?._id!, body);
+      })
+    ).subscribe();
   }
+
 }
+
+
