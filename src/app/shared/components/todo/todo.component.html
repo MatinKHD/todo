@@ -41,7 +41,7 @@
 
 
   <ng-template #dateAndComplete>
-    <p class="text-sm text-gray-500" [ngClass]="[isExpanded ? 'w-full text-end': '', todo()?.date! | dateColor: todo()?.done!]">{{ todo()?.date| date: 'mediumDate' }}</p>
+    <p class="text-sm text-gray-500" [ngClass]="[isExpanded ? 'w-full text-end': '', todo()?.date! | dateColor: todo()?.done!]">{{ todo()?.date| date: isExpanded ? 'medium' : 'mediumDate' }}</p>
 
         <mat-checkbox
             [formControl]="isCompletedControl"
