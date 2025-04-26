@@ -24,10 +24,10 @@ export class CreateListDialogComponent {
   title!: string;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: {isEditMode: boolean, title: string},
     private dialogRef: MatDialogRef<CreateListDialogComponent>,
   ) {
-    this.title = data.isEditable ? data.title : '' ;
+    this.title = data.isEditMode ? data.title : '' ;
   }
   
   handleClose(data: string | null = null) {
