@@ -76,7 +76,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
             data: { 
                 task, 
                 isEditMode: true,
-                existingDates:  this.tasks().map((t) => t.date) 
+                exisitngDates:  this.tasks().map((t) => t.date) 
             }
         }).afterClosed().pipe(
             switchMap((res) => {
@@ -92,7 +92,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
         ).subscribe()
     }
 
-    private deleteTask(id: string): Observable<TaskInterface | unknown> {
+    protected deleteTask(id: string): Observable<TaskInterface | unknown> {
         return this.tasksService.deleteTask(id).pipe(
             tap(() => this.tasks.update((tasks) => tasks.filter((task) => task._id !== id))),
             tap(() => this.snackBar.notification$.next('Task deleted successfully')),
@@ -100,7 +100,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
         )
     }
 
-    private updateTask(task: TaskInterface): Observable<TaskInterface> {
+    protected updateTask(task: TaskInterface): Observable<TaskInterface> {
         return this.tasksService.updateTask(task._id, task).pipe(
             tap(() => {
                 this.tasks.update((tasks) => {
@@ -112,7 +112,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
         )
     }
 
-    private getListDetail(): Observable<ListInterface> {
+    protected getListDetail(): Observable<ListInterface> {
         return this.listService.getListDetail(this.listId).pipe(
             tap((res) => {
                 if (!res) return;
