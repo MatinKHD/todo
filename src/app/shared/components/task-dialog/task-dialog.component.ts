@@ -79,6 +79,7 @@ export class TaskDialogComponent implements OnInit {
   }
 
   private isDuplicateDate(date: Date): boolean {
+    if (this.data.isEditMode && this.data.task.date === date.toISOString()) return false;
     return this.data.exisitngDates.length === 0
       ? false
       : this.data.exisitngDates.includes(date.toISOString())
