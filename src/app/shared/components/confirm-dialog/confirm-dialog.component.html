@@ -1,1 +1,25 @@
-<p>confirm-dialog works!</p>
+<div class="p-6 max-w-md mx-auto bg-white rounded-lg shadow-lg">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">{{ data.title }}</h2>
+  
+    <mat-dialog-content>
+      <p class="text-gray-600">{{ data.message }}</p>
+    </mat-dialog-content>
+  
+    <mat-dialog-actions class="flex justify-end mt-6 space-x-4">
+      <button
+        mat-button
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200"
+        (click)="onNoClick()"
+      >
+        No
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
+        (click)="onYesClick()"
+      >
+        Yes
+      </button>
+    </mat-dialog-actions>
+  </div>
