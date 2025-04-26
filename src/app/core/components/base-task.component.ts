@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable, switchMap, tap } from 'rxjs';
 import { BaseComponent } from '../../core/components/base.component';
 import { TasksService } from '../../core/services/tasks/tasks.service';
 import { TaskInterface } from '../../shared/interfaces/task.interface';
@@ -16,31 +16,27 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
     activatedRoute = inject(ActivatedRoute);
     tasks = signal<TaskInterface[]>([]);
     listId!: string;
-    listDetail!: ListInterface;
+    listDetail = signal<ListInterface | undefined>(undefined);
 
     abstract getTasks(): Observable<TaskInterface[]>;
 
     ngOnInit(): void {
         this.activatedRoute.params.pipe(
             tap(params => {
-                if(!params['id']) return;
+                if (!params['id']) return;
                 this.listId = params['id']
-            })
-        ).subscribe();
-
-        const listSub = this.getListDetail().subscribe()
-
-        const sub = this.getTasks().pipe(
+            }),
+            switchMap(() => this.getListDetail()),
+            switchMap(() => this.getTasks()),
             tap((res) => this.tasks.set(res))
         ).subscribe();
-        this.subscriptions.push(sub, listSub);
     }
 
     private getListDetail(): Observable<ListInterface> {
         return this.listService.getListDetail(this.listId).pipe(
             tap((res) => {
-                if(!res) return;
-                this.listDetail = res
+                if (!res) return;
+                this.listDetail.set(res)
             })
         )
     }
