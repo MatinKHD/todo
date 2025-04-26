@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseService } from '../base.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { TaskInterface } from '../../../shared/interfaces/task.interface';
+import { CreateTask, TaskInterface } from '../../../shared/interfaces/task.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -33,16 +33,16 @@ export class TasksService extends BaseService {
     return this.getByDetail<TaskInterface>('tasks/query/', listId);
   }
 
-  getTaskById(id: string): Observable<Omit<TaskInterface, 'id'>> {
-    return this.getByDetail<Omit<TaskInterface, 'id'>>('tasks/', id);
+  getTaskById(id: string): Observable<CreateTask> {
+    return this.getByDetail<CreateTask>('tasks/', id);
   }
 
-  updateTask(id:string, body: Omit<TaskInterface, 'id'>): Observable<TaskInterface> {
-    return this.put<TaskInterface, Omit<TaskInterface, 'id'>>('tasks/', body, id);
+  updateTask(id:string, body: TaskInterface): Observable<TaskInterface> {
+    return this.put<TaskInterface, TaskInterface>('tasks', body, id);
   }
 
-  createTask( body: Omit<TaskInterface, 'id'>): Observable<TaskInterface> {
-    return this.post<TaskInterface, Omit<TaskInterface, 'id'>>('tasks/', body);
+  createTask( body: CreateTask): Observable<TaskInterface> {
+    return this.post<TaskInterface, CreateTask>('tasks/', body);
   }
 
   deleteTask(id: string): Observable<TaskInterface> {

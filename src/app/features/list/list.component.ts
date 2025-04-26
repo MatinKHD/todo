@@ -41,7 +41,7 @@ export class ListComponent extends BaseTaskComponent {
     }).afterClosed().pipe(
       switchMap((res) => {
         if (!res) of(null);
-        const body: Omit<TaskInterface, 'id'> = {
+        const body: Omit<TaskInterface, '_id'> = {
           title: res.title,
           description: res.description,
           date: res.date,
