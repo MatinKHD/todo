@@ -34,4 +34,11 @@ export class ListStateService {
     currentLists = [...currentLists, item];
     this.setLists(currentLists);
   }
+
+  //Remove Item from list
+  removeItem(item: ListInterface): void {
+    let currentLists = this.getLists();
+    currentLists = currentLists.filter(l => l._id !== item._id);
+    this.setLists(currentLists);
+  }
 }
