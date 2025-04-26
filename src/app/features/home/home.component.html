@@ -1,5 +1,23 @@
 <div class="flex flex-wrap justify-center items-center mx-2">
-    <h1 class="w-full text-3xl font-semibold mb-4">Daily Tasks</h1>
+    <header class="w-full flex flex-wrap justify-center lg:justify-between xl:justify-between 2xl:justify-between mb-4">
+        <div class="w-full lg:w-6/12 xl:w-6/12 2xl:w-6/12 flex flex-wrap justify-between lg:justify-start xl:justify-start 2xl:justify-start items-center">
+            <h1 class="lg:text-xl xl:text-xl 2xl:text-xl font-semibold">
+                {{listDetail()?.title}} Tasks
+            </h1>
+        </div>  
+        
+        <button 
+            mat-flat-button
+            color="primary"
+            (click)="handleAddTasks()"
+            class="hover:text-accent-50 px-3"
+        >
+            <span class="lg:text-lg xl:text-lg 2xl:text-lg font-semibold">Add Tasks</span>    
+            <mat-icon>add</mat-icon>
+        </button>
+    </header>
+
+
     
     <app-todo-container
         class="w-full"
