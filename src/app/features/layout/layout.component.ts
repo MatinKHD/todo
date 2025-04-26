@@ -18,7 +18,7 @@ interface NavItems {
   _id: string
   title: string,
   date: Date | string,
-  isMain: Boolean
+  isMain: boolean
   route: string,
   icon: string | null,
 }
