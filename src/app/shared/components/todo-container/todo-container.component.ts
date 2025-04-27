@@ -1,7 +1,7 @@
-import { Component, EventEmitter, input, Input, InputSignal, Output } from '@angular/core';
-import { TodoComponent } from '../todo/todo.component';
-import { TaskInterface } from '../../interfaces/task.interface';
 import { NgFor } from '@angular/common';
+import { ChangeDetectionStrategy, Component, EventEmitter, input, Output } from '@angular/core';
+import { TaskInterface } from '../../interfaces/task.interface';
+import { TodoComponent } from '../todo/todo.component';
 
 @Component({
   selector: 'app-todo-container',
@@ -10,7 +10,8 @@ import { NgFor } from '@angular/common';
     NgFor
   ],
   templateUrl: './todo-container.component.html',
-  styleUrl: './todo-container.component.scss'
+  styleUrl: './todo-container.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TodoContainerComponent {
 

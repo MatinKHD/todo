@@ -1,14 +1,14 @@
 import { DatePipe, NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
-import { Component, EventEmitter, input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, input, OnInit, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { TaskInterface } from '../../interfaces/task.interface';
 import { DateColorPipe } from '../../pipes/date-color.pipe';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 @Component({
   selector: 'app-todo',
@@ -28,7 +28,8 @@ import { DateColorPipe } from '../../pipes/date-color.pipe';
     MatTooltipModule
   ],
   templateUrl: './todo.component.html',
-  styleUrl: './todo.component.scss'
+  styleUrl: './todo.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TodoComponent implements OnInit {
 
