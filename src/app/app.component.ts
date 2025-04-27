@@ -27,6 +27,6 @@ export class AppComponent implements OnInit {
   }
 
   openSnackbar(message: string) {
-    this.snackbar.open(message, undefined, { duration: 2000 });
+    this.snackbar.open(message, undefined , { panelClass: 'text-center', duration: 2000 });
   }
 }
