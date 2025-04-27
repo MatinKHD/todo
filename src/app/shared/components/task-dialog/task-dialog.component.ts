@@ -48,7 +48,7 @@ export class TaskDialogComponent implements OnInit {
     this.descriptionControl.setValue(description);
 
     const parsedDate = new Date(date);
-    this.dateControl.setValue(parsedDate.toISOString().split('T')[0]); // Set date in YYYY-MM-DD format
+    this.dateControl.setValue(parsedDate.toISOString())
     this.timeControl.setValue(this.formatTime(parsedDate));
   }
 
