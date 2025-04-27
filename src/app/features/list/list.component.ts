@@ -90,6 +90,7 @@ export class ListComponent extends BaseTaskComponent {
     return this.updateTask(updatedTask).pipe(
       tap(() => {
         this.tasks.update((tasks) => tasks.filter((t) => t._id !== task._id));
+        this.existingDates.update(dates => dates.filter(d => d !== task.date))
         this.snackBar.notification$.next('Task moved to daily list successfully');
       })
     );
