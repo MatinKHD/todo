@@ -87,9 +87,18 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
         this.dialog.open(TaskDialogComponent, {
             data: { task, isEditMode: true, exisitngDates: this.existingDates() }
         }).afterClosed().pipe(
-            switchMap((res) => res ? this.updateTask(res) : of(null)),
+            switchMap((updatedTask) => (!updatedTask || this.isTaskUnchanged(task, updatedTask)) ? of(null) : this.updateTask(updatedTask)),
             this.handleError(`Fialed to edit task`)
         ).subscribe();
+    }
+
+    private isTaskUnchanged(originalTask: TaskInterface, updatedTask: TaskInterface): boolean {
+        return (
+            originalTask.title === updatedTask.title &&
+            originalTask.description === updatedTask.description &&
+            originalTask.date === updatedTask.date &&
+            originalTask.done === updatedTask.done
+        );
     }
 
     onMarkCompletedTask(event: { task: TaskInterface, isComplete: boolean }): void {
