@@ -104,7 +104,11 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
     }
 
     private removeTaskFromState(id: string): void {
-        this.tasks.update((tasks) => tasks.filter((task) => task._id !== id))
+        this.tasks.update((tasks) => {
+            const removedTask = tasks.find(t => t._id === id);
+            this.existingDates.update(dates => dates.filter(d => d !== removedTask?.date))
+            return tasks.filter((task) => task._id !== id)
+        })
     }
 
     protected updateTask(task: TaskInterface): Observable<TaskInterface> {
