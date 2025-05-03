@@ -19,14 +19,16 @@ import { MatButtonModule } from '@angular/material/button';
 export class HomeComponent extends BaseTaskComponent implements OnInit {
 
   override ngOnInit(): void {
-    this.getMainList().pipe(
+    const sub = this.getMainList().pipe(
       switchMap(() => this.getTasks()),
       tap((res) => this.tasks.set(res)),
       tap(() => this.existingDates.set(this.tasks().map((t) => t.date.toString()))),
     ).subscribe();
+
+    this.subscriptions.push(sub);
   }
   
-  getMainList(): Observable<any> {
+  private getMainList(): Observable<any> {
     return this.listService.getDailyTaskListDetail().pipe(
       tap(list => this.listDetail.set(list))
     )

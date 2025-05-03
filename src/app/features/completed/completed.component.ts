@@ -27,11 +27,10 @@ export class CompletedComponent extends BaseTaskComponent {
         exisitngDates: []
       }
     }).afterClosed().pipe(
-      switchMap((res) => {
-        console.log(res);
-        
-        return res ? this.updateTask(res).pipe(this.handleError(`Something went wrong, Can't edit`)) : of(null);
-      })
+      switchMap((res) => res
+        ? this.updateTask(res).pipe(this.handleError(`Something went wrong, Can't edit`))
+        : of(null)
+      )
     ).subscribe();
   }
 

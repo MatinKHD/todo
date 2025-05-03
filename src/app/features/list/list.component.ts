@@ -59,9 +59,11 @@ export class ListComponent extends BaseTaskComponent {
   private updateListName(newTitle: string | null): Observable<ListInterface | null> {
     if (!newTitle) return of(null);
     const updatedList: ListInterface = { ...this.listDetail()!, title: newTitle };
-    this.listDetail.update((list) => ({ ...list!, title: newTitle }));
     return this.listService.updateItem(this.listDetail()?._id!, updatedList).pipe(
-      tap(() => this.listStateService.updateList(updatedList)),
+      tap(() => {
+        this.listDetail.update((list) => ({ ...list!, title: newTitle }));
+        this.listStateService.updateList(updatedList);
+      }),
       tap(() => this.snackBar.notification$.next('List name updated successfully'))
     );
   }

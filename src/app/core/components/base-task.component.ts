@@ -49,7 +49,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
         this.existingDates.set(tasks.map((t) => t.date.toString()))
     }
 
-    handleAddTasks() {
+    protected handleAddTasks() {
         this.dialog.open(TaskDialogComponent, {
             data: { isEditMode: false, exisitngDates: this.existingDates() }
         }).afterClosed().pipe(
@@ -74,7 +74,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
         this.tasks.update((tasks) => [...tasks, task])
     }
 
-    onDeleteTask(id: string): void {
+    protected onDeleteTask(id: string): void {
         this.dialog.open(ConfirmDialogComponent, {
             data: { title: 'Confirm Delete', message: 'Are you sure you want to delete this task?' }
         }).afterClosed().pipe(
@@ -83,7 +83,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
         ).subscribe();
     }
 
-    onEditTask(task: TaskInterface): void {
+    protected onEditTask(task: TaskInterface): void {
         this.dialog.open(TaskDialogComponent, {
             data: { task, isEditMode: true, exisitngDates: this.existingDates() }
         }).afterClosed().pipe(
@@ -101,7 +101,7 @@ export abstract class BaseTaskComponent extends BaseComponent implements OnInit 
         );
     }
 
-    onMarkCompletedTask(event: { task: TaskInterface, isComplete: boolean }): void {
+    protected onMarkCompletedTask(event: { task: TaskInterface, isComplete: boolean }): void {
         const body: TaskInterface = { ...event.task, done: event.isComplete };
         this.updateTask(body).pipe(this.handleError('Something wrong, please try again')).subscribe()
     }
