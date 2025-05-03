@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TaskInterface } from '../../interfaces/task.interface';
 import { SnackbarService } from '../../services/snackbar.service';
+import { noWhitespaceValidator } from '../../utilites/noWhiteSpace.validator';
 
 @Component({
   selector: 'app-task-dialog',
@@ -32,8 +33,8 @@ export class TaskDialogComponent implements OnInit {
   snackBar: SnackbarService = inject(SnackbarService);
 
   errorMessageForTitle = signal('');
-  titleControl = this.fb.control('', { validators: [Validators.required, Validators.maxLength(100)] });
-  descriptionControl = this.fb.control('', { validators: Validators.maxLength(500) });
+  titleControl = this.fb.control('', { validators: [Validators.required, Validators.maxLength(100), noWhitespaceValidator()] });
+  descriptionControl = this.fb.control('', { validators: [Validators.maxLength(500), noWhitespaceValidator()] });
   dateControl = this.fb.control('', { validators: [Validators.required] });
   timeControl = this.fb.control('', { validators: [Validators.required] });
 
